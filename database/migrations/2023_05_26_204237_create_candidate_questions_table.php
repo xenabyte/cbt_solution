@@ -16,9 +16,9 @@ class CreateCandidateQuestionsTable extends Migration
         Schema::create('candidate_questions', function (Blueprint $table) {
             $table->id();
             $table->string('candidate_id')->nullable();
-            $table->string('exam_id')->nullable();
             $table->string('question_id')->nullable();
             $table->string('candidate_option')->nullable();
+            $table->string('candidate_is_correct')->nullable();;
             $table->timestamps();
         });
     }

@@ -41,4 +41,14 @@ class Admin extends Authenticatable
     {
         $this->notify(new AdminResetPassword($token));
     }
+
+    /**
+     * Get all of the examination for the Admin
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function examination()
+    {
+        return $this->hasMany(Examination::class, 'admin_id', 'id');
+    }
 }

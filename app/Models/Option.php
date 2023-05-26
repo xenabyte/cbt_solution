@@ -19,4 +19,14 @@ class Option extends Model
         'option_text', 
         'is_correct',
     ];
+
+    /**
+     * Get the question that owns the Option
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function question()
+    {
+        return $this->belongsTo(Question::class, 'question_id');
+    }
 }

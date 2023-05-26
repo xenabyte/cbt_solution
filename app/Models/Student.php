@@ -21,5 +21,16 @@ class Student extends Model
         'lastname',
         'image',
         'email',
+        'slug',
     ];
+
+    /**
+     * Get all of the candidates for the Student
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function candidates()
+    {
+        return $this->hasMany(Candidate::class);
+    }
 }

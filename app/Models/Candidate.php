@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Question extends Model
+class Candidate extends Model
 {
     use HasFactory;
 
@@ -15,12 +15,13 @@ class Question extends Model
      * @var array
      */
     protected $fillable = [
+        'student_id', 
         'examination_id', 
-        'text', 
+        'result'
     ];
 
     /**
-     * Get the examination that owns the Question
+     * Get the exam that owns the Candidate
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -30,12 +31,12 @@ class Question extends Model
     }
 
     /**
-     * Get all of the options for the Question
+     * Get the student that owns the Candidate
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function options()
+    public function student()
     {
-        return $this->hasMany(Option::class);
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }
