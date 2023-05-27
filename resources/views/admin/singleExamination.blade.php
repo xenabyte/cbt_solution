@@ -121,6 +121,7 @@
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $candidate->student->firstname }} </td>
                                         <td>{{ $candidate->student->lastname }} </td>
+                                        <td>{{ $candidate->student->email }}</td>
                                         <td>{{ $candidate->student->matric_number }} </td>
                                         <td>{{ $candidate->student->reg_number }} </td>
                                         <td>
@@ -163,10 +164,22 @@
                                                             </div>
                                     
                                                             <div class="modal-body">
-                                                                <form action="{{ url('/admin/updateCandidate') }}" method="post" enctype="multipart/form-data">
+                                                                <form action="{{ url('/admin/updateStudent') }}" method="post" enctype="multipart/form-data">
                                                                     @csrf
 
-                                                                    <input name="candidate_id" type="hidden" value="{{$candidate->id}}">
+                                                                    <input name="student_id" type="hidden" value="{{$candidate->student->id}}">
+
+                                                                    <div class="mb-3">
+                                                                        <label for="matric" class="form-label">Matric Number</label>
+                                                                        <input type="text" class="form-control" name="matric_number" readonly id="matric" value="{{ $candidate->student->matric_number }}">
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="reg" class="form-label">Registration Number</label>
+                                                                        <input type="text" class="form-control" name="reg_number" id="reg" readonly value="{{ $candidate->student->reg_number }}">
+                                                                    </div>
+
+                                                                    <hr>
                                     
                                                                     <div class="mb-3">
                                                                         <label for="firstname" class="form-label">Firstname</label>
@@ -181,16 +194,6 @@
                                                                     <div class="mb-3">
                                                                         <label for="email" class="form-label">Email</label>
                                                                         <input type="text" class="form-control" name="email" id="email" value="{{ $candidate->student->email }}">
-                                                                    </div>
-                                    
-                                                                    <div class="mb-3">
-                                                                        <label for="matric" class="form-label">Matric Number</label>
-                                                                        <input type="text" class="form-control" name="matric_number" id="matric" value="{{ $candidate->student->matric_number }}">
-                                                                    </div>
-
-                                                                    <div class="mb-3">
-                                                                        <label for="reg" class="form-label">Registration Number</label>
-                                                                        <input type="text" class="form-control" name="reg_number" id="reg" value="{{ $candidate->student->reg_number }}">
                                                                     </div>
                                     
                                                                     <hr>
@@ -241,7 +244,7 @@
                         <div class="modal-body">
                             <form action="{{ url('/admin/addBulkCandidate') }}" method="post" enctype="multipart/form-data">
                                 @csrf
-
+                                <input type="hidden" name="examination_id" value="{{ $examination->id }}">
                                 <div class="mb-3">
                                     <label for="file" class="form-label">File(CSV)</label>
                                     <input type="file" class="form-control" name="file" id="type">
@@ -267,9 +270,9 @@
                         </div>
 
                         <div class="modal-body">
-                            <form action="{{ url('/admin/addSingleStudent') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ url('/admin/addSingleCandidate') }}" method="post" enctype="multipart/form-data">
                                 @csrf
-                                
+                                <input type="hidden" name="examination_id" value="{{ $examination->id }}">
                                 <div class="mb-3">
                                     <label for="matric" class="form-label">Matric Number</label>
                                     <input type="text" class="form-control" name="matric_number" id="matric">

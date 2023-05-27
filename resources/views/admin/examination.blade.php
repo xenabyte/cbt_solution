@@ -65,7 +65,7 @@
                                                 <div class="modal-body">
                                                     <form action="{{ url('/admin/updateExamination') }}" method="post" enctype="multipart/form-data">
                                                         @csrf
-                                                        <input type="hidden" name='page_id' value="{{ $examination->id }}">
+                                                        <input type="hidden" name='examination_id' value="{{ $examination->id }}">
                                                         
                                                         <div class="mb-3">
                                                             <label for="title" class="form-label">Examination Title</label>

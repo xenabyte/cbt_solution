@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use League\Csv\Reader;
 use Illuminate\Database\QueryException;
 
+use Log;
 
 use App\Models\Admin;
 use App\Models\Examination;
@@ -185,7 +186,7 @@ class AdminController extends Controller
 
     public function students(){
         
-        $students = Student::with('candidates', 'candidates.z')->get();
+        $students = Student::with('candidates')->get();
 
         return view('admin.students', [
             'students' => $students
@@ -291,8 +292,6 @@ class AdminController extends Controller
     }
 
     public function addBulkStudent(Request $request){
-
-
         try {
 
             $validator = Validator::make($request->all(), [
@@ -348,4 +347,140 @@ class AdminController extends Controller
         }
 
     }
+
+    public function addSingleCandidate(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'matric_number' => 'required_without:reg_number',
+            'reg_number' => 'required_without:matric_number',
+            'examination_id' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$examination = Examination::find($request->examination_id)){
+            alert()->error('Oops', 'Invalid Examination')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$student = Student::where('matric_number',$request->matric_number)->orWhere('reg_number', $request->reg_number)->first()){
+            alert()->error('Oops','Invalid Student')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($candidate = Candidate::where('examination_id', $request->examination_id)->where('student_id', $student->id)->first()){
+            alert()->error('Oops','Student enrolled already')->persistent('Close');
+            return redirect()->back();
+        }
+
+        $newCandidate = ([
+            'examination_id' => $request->examination_id,
+            'student_id' => $student->id
+        ]);
+
+        if(Candidate::create($newCandidate)){
+            alert()->success('Candidate created successfully', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+
+    public function addBulkCandidate(Request $request){
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'file' => 'required',
+                'examination_id' => 'required',
+            ]);
+    
+            if($validator->fails()) {
+                alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+                return redirect()->back();
+            }
+    
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+    
+                // Create a CSV reader instance
+                $csv = Reader::createFromPath($file->getPathname());
+    
+                // Set the header offset (skip the first row)
+                $csv->setHeaderOffset(0);
+    
+                // Get all records from the CSV file
+                $records = $csv->getRecords();
+    
+                foreach ($records as $row) {
+                    //check for existing student record
+                    if(!$student = Student::where('matric_number',$row['matric_number'])->orWhere('reg_number', $row['reg_number'])->first()){
+                        Student::create([
+                            'firstname' => $row['firstname'],
+                            'lastname' => $row['lastname'],
+                            'email' => $row['email'],
+                            'matric_number' => $row['matric_number'],
+                            'reg_number' => $row['reg_number'],
+                        ]);
+                    }
+
+                    $student = Student::where('matric_number',$row['matric_number'])->orWhere('reg_number', $row['reg_number'])->first();
+
+                    if(!$candidate = Candidate::where('examination_id', $request->examination_id)->where('student_id', $student->id)->first()){
+                        Candidate::create([
+                            'examination_id' => $request->examination_id,
+                            'student_id' => $student->id,
+                            'result' => 0
+                        ]);
+                    }
+
+                }
+    
+                alert()->success('Changes Saved', 'Students added successfully')->persistent('Close');
+                return redirect()->back();
+            }
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] === 1054 || $e->errorInfo[1] === 1061) {
+                $errorMessage = 'Some students have the same matric number or registration numbeer, kindly check';
+            } else {
+                $errorMessage = 'Something went wrong';
+            }
+
+            // do something with the error message, such as returning a response
+            alert()->error('Oops!', $errorMessage)->persistent('Close');
+            return redirect()->back();
+        }
+    }
+
+
+    public function deleteCandidate(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'candidate_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$candidate = Candidate::find($request->candidate_id)){
+            alert()->error('Oops', 'Invalid Candidate')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($candidate->delete()){
+            alert()->success('Record Deleted', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+    
+
 }

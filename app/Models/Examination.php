@@ -45,7 +45,7 @@ class Examination extends Model
      */
     public function questions()
     {
-        return $this->hasMany(Question::class, 'id', 'question_id');
+        return $this->hasMany(Question::class);
     }
 
     /**
@@ -55,6 +55,6 @@ class Examination extends Model
      */
     public function candidates()
     {
-        return $this->hasMany(Candidate::class, 'id', 'candidate_id');
+        return $this->hasMany(Candidate::class);
     }
 }
