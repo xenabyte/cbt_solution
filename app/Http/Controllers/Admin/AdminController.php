@@ -175,7 +175,7 @@ class AdminController extends Controller
 
     public function getExamination($slug){
         
-        $examination = Examination::with('admin', 'questions', 'candidates')->where('slug', $slug)->first();
+        $examination = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->where('slug', $slug)->first();
 
         return view('admin.singleExamination', [
             'examination' => $examination
