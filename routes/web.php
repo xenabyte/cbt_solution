@@ -37,4 +37,13 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/addExamination', [App\Http\Controllers\Admin\AdminController::class, 'addExamination'])->name('addExamination');
   Route::post('/updateExamination', [App\Http\Controllers\Admin\AdminController::class, 'updateExamination'])->name('updateExamination');
   Route::post('/deleteExamination', [App\Http\Controllers\Admin\AdminController::class, 'deleteExamination'])->name('deleteExamination');
+
+  Route::get('/examination/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'getExamination'])->name('getExamination');
+
+  Route::get('/students', [App\Http\Controllers\Admin\AdminController::class, 'students'])->name('students');
+  Route::post('/addSingleStudent', [App\Http\Controllers\Admin\AdminController::class, 'addSingleStudent'])->name('addSingleStudent');
+  Route::post('/addBulkStudent', [App\Http\Controllers\Admin\AdminController::class, 'addBulkStudent'])->name('addBulkStudent');
+  Route::post('/updateStudent', [App\Http\Controllers\Admin\AdminController::class, 'updateStudent'])->name('updateStudent');
+  Route::post('/deleteStudent', [App\Http\Controllers\Admin\AdminController::class, 'deleteStudent'])->name('deleteStudent');
+
 });

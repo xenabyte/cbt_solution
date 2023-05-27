@@ -15,12 +15,13 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('matric_number')->nullable();
-            $table->string('reg_number')->nullable();
+            $table->string('matric_number')->unique()->nullable();
+            $table->string('reg_number')->unique()->nullable();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->string('image')->nullable();
             $table->string('slug')->nullable();
+            $table->string('email')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

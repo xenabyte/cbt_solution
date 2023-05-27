@@ -46,7 +46,7 @@
                                             <p class="card-text">{!! $examination->description !!}</p>
                                             <p class="card-text"><strong>Examination Added By: </strong>{{ $examination->admin->name }}</p>
                                             <p class="card-text"><strong>Examination Duration: </strong>{{ $examination->duration }}</p>
-                                            <p class="card-text"><strong>Question Quantity </strong>{{ $examination->question_number }}</p>
+                                            <p class="card-text"><strong>Question Quantity: </strong>{{ $examination->question_number }}</p>
                                             <div class="text-start">
                                                 <a href="{{url('/admin/examination/'.$examination->slug)}}" class="btn btn-info">View</a>
                                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editExamination{{$examination->id}}" style="margin: 5px" class="btn btn-primary">Edit Examination</a>
