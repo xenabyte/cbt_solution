@@ -17,6 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->string('examination_id')->nullable();
             $table->string('text')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

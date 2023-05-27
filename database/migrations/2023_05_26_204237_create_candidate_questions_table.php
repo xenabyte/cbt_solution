@@ -18,7 +18,8 @@ class CreateCandidateQuestionsTable extends Migration
             $table->string('candidate_id')->nullable();
             $table->string('question_id')->nullable();
             $table->string('candidate_option')->nullable();
-            $table->string('candidate_is_correct')->nullable();;
+            $table->string('candidate_is_correct')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

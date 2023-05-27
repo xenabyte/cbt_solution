@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Examination extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +22,9 @@ class Examination extends Model
         'code', 
         'description',
         'duration',
-        'marks',
+        'mark',
+        'question_number',
+        'slug',
         'status'
     ];
 
@@ -41,7 +45,7 @@ class Examination extends Model
      */
     public function questions()
     {
-        return $this->hasMany(Question::class, 'question_id', 'id');
+        return $this->hasMany(Question::class, 'id', 'question_id');
     }
 
     /**
@@ -51,6 +55,6 @@ class Examination extends Model
      */
     public function candidates()
     {
-        return $this->hasMany(Candidate::class, 'candidate_id', 'id');
+        return $this->hasMany(Candidate::class, 'id', 'candidate_id');
     }
 }

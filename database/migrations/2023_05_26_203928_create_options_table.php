@@ -18,6 +18,7 @@ class CreateOptionsTable extends Migration
             $table->string('question_id')->nullable();
             $table->string('option_text')->nullable();
             $table->integer('is_correct')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -22,7 +22,9 @@ class CreateExaminationsTable extends Migration
             $table->integer('duration')->nullable();
             $table->integer('mark')->nullable();
             $table->string('status')->nullable();
+            $table->string('question_number')->nullable();
             $table->string('slug')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

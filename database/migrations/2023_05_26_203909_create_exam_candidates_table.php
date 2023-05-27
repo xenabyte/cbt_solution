@@ -13,11 +13,12 @@ class CreateExamCandidatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('exam_candidates', function (Blueprint $table) {
+        Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->string('student_id')->nullable();
             $table->string('examination_id')->nullable();
             $table->string('result')->nulllable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateExamCandidatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exam_candidates');
+        Schema::dropIfExists('candidates');
     }
 }

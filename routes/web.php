@@ -33,7 +33,7 @@ Route::group(['prefix' => 'admin'], function () {
 
   Route::get('/home', [App\Http\Controllers\Admin\AdminController::class, 'index']);
 
-  Route::get('/examination', [App\Http\Controllers\Admin\AdminController::class, 'examination'])->name('examination');
+  Route::get('/examinations', [App\Http\Controllers\Admin\AdminController::class, 'examinations'])->name('examinations');
   Route::post('/addExamination', [App\Http\Controllers\Admin\AdminController::class, 'addExamination'])->name('addExamination');
   Route::post('/updateExamination', [App\Http\Controllers\Admin\AdminController::class, 'updateExamination'])->name('updateExamination');
   Route::post('/deleteExamination', [App\Http\Controllers\Admin\AdminController::class, 'deleteExamination'])->name('deleteExamination');

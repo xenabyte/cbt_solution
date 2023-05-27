@@ -21,6 +21,7 @@ class CreateStudentsTable extends Migration
             $table->string('lastname')->nullable();
             $table->string('image')->nullable();
             $table->string('slug')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
