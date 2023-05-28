@@ -15,12 +15,12 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('examination_id')->nullable();
+            $table->integer('examination_id')->nullable();
             $table->string('text')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('examination_id')->references('id')->on('examinations')->onDelete('cascade');
+            // $table->foreign('examination_id')->references('id')->on('examinations')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('questions');
+        Schema::drop('questions');
     }
 }

@@ -61,3 +61,21 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/addOption', [App\Http\Controllers\Admin\AdminController::class, 'addOption'])->name('addOption');
 
 });
+
+Route::group(['prefix' => 'student'], function () {
+  Route::get('/login', [App\Http\Controllers\Student\Auth\LoginController::class, 'showLoginForm'])->name('login');
+  Route::post('/login', [App\Http\Controllers\Student\Auth\LoginController::class, 'login']);
+  Route::post('/logout', [App\Http\Controllers\Student\Auth\LoginController::class, 'logout'])->name('logout');
+
+  
+  Route::post('/password/email', [App\Http\Controllers\Student\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.request');
+  Route::post('/password/reset', [App\Http\Controllers\Student\Auth\ResetPasswordController::class, 'reset'])->name('password.email');
+  Route::get('/password/reset', [App\Http\Controllers\Student\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.reset');
+  Route::get('/password/reset/{token}', [App\Http\Controllers\Student\Auth\ResetPasswordController::class, 'showResetForm']);
+
+});
+
+Route::group(['prefix' => 'cbt'], function () {
+  Route::get('/exams', [App\Http\Controllers\CBT\HomeController::class, 'index']);
+
+});

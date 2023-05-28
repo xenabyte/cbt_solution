@@ -15,13 +15,13 @@ class CreateOptionsTable extends Migration
     {
         Schema::create('options', function (Blueprint $table) {
             $table->id();
-            $table->string('question_id')->nullable();
+            $table->integer('question_id')->nullable();
             $table->string('option_text')->nullable();
             $table->integer('is_correct')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+            // $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
         });
     }
 

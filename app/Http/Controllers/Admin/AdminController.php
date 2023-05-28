@@ -206,14 +206,16 @@ class AdminController extends Controller
             alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
             return redirect()->back();
         }
-
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->title)));
+        
+        $password = !empty($request->matric_number) ?  $request->matric_number : $request->reg_number;
 
         $newStudent = ([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'matric_number' => $request->matric_number,
             'reg_number' => $request->reg_number,
+            'password' => bcrypt($password),
+            'view_password' => $password,
         ]);
 
         if(Student::create($newStudent)){
@@ -323,12 +325,16 @@ class AdminController extends Controller
                         return redirect()->back();
                     }
 
+                    $password = !empty($row['matric_number']) ?  $row['matric_number'] : $row['reg_number'];
+
                     Student::create([
                         'firstname' => $row['firstname'],
                         'lastname' => $row['lastname'],
                         'email' => $row['email'],
                         'matric_number' => $row['matric_number'],
                         'reg_number' => $row['reg_number'],
+                        'password' => bcrypt($password),
+                        'view_password' => $password,
                     ]);
                 }
     

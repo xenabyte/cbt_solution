@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Notifications\StudentResetPassword;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-
-class Student extends Model
+class Student extends Authenticatable
 {
-    use HasFactory, SoftDeletes;
+    use Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +23,8 @@ class Student extends Model
         'lastname',
         'image',
         'email',
+        'password',
+        'view_password'
     ];
 
     /**
@@ -33,5 +35,25 @@ class Student extends Model
     public function candidates()
     {
         return $this->hasMany(Candidate::class);
+    }
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new StudentResetPassword($token));
     }
 }

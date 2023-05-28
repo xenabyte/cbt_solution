@@ -15,14 +15,14 @@ class CreateExamCandidatesTable extends Migration
     {
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
-            $table->string('student_id')->nullable();
-            $table->string('examination_id')->nullable();
-            $table->string('result')->nulllable();
+            $table->integer('student_id')->nullable();
+            $table->integer('examination_id')->nullable();
+            $table->integer('result')->nulllable();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('examination_id')->references('id')->on('examinations')->onDelete('cascade');
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            // $table->foreign('examination_id')->references('id')->on('examinations')->onDelete('cascade');
+            // $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 
