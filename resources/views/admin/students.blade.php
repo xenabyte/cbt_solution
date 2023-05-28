@@ -102,8 +102,21 @@
                                                                     </div>
                                             
                                                                     <div class="modal-body">
+                                                                        <hr>
                                                                         <form action="{{ url('/admin/updateStudent') }}" method="post" enctype="multipart/form-data">
                                                                             @csrf
+
+                                                                            <div class="mb-3">
+                                                                                <label for="matric" class="form-label">Matric Number</label>
+                                                                                <input type="text" class="form-control" name="matric_number" id="matric" value="{{ $student->matric_number }}">
+                                                                            </div>
+
+                                                                            <div class="mb-3">
+                                                                                <label for="reg" class="form-label">Registration Number</label>
+                                                                                <input type="text" class="form-control" name="reg_number" id="reg" value="{{ $student->reg_number }}">
+                                                                            </div>
+
+                                                                            <hr>
 
                                                                             <input name="student_id" type="hidden" value="{{$student->id}}">
                                             
@@ -115,16 +128,6 @@
                                                                             <div class="mb-3">
                                                                                 <label for="lastname" class="form-label">Lastname</label>
                                                                                 <input type="text" class="form-control" name="lastname" id="lastname" value="{{ $student->lastname }}">
-                                                                            </div>
-                                            
-                                                                            <div class="mb-3">
-                                                                                <label for="matric" class="form-label">Matric Number</label>
-                                                                                <input type="text" class="form-control" name="matric_number" id="matric" value="{{ $student->matric_number }}">
-                                                                            </div>
-
-                                                                            <div class="mb-3">
-                                                                                <label for="reg" class="form-label">Registration Number</label>
-                                                                                <input type="text" class="form-control" name="reg_number" id="reg" value="{{ $student->reg_number }}">
                                                                             </div>
                                             
                                                                             <hr>
@@ -197,6 +200,18 @@
                             <form action="{{ url('/admin/addSingleStudent') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
+                                    <label for="matric" class="form-label">Matric Number</label>
+                                    <input type="text" class="form-control" name="matric_number" id="matric">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="reg" class="form-label">Registration Number</label>
+                                    <input type="text" class="form-control" name="reg_number" id="reg">
+                                </div>
+
+                                <hr>
+
+                                <div class="mb-3">
                                     <label for="firstname" class="form-label">Firstname</label>
                                     <input type="text" class="form-control" name="firstname" id="firstname">
                                 </div>
@@ -207,13 +222,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="matric" class="form-label">Matric Number</label>
-                                    <input type="text" class="form-control" name="matric_number" id="matric">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="reg" class="form-label">Registration Number</label>
-                                    <input type="text" class="form-control" name="reg_number" id="reg">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" class="form-control" name="email" id="email">
                                 </div>
 
                                 <hr>

@@ -52,5 +52,12 @@ Route::group(['prefix' => 'admin'], function () {
   
 
   Route::post('/uploadBulkQuestion', [App\Http\Controllers\Admin\AdminController::class, 'uploadBulkQuestion'])->name('uploadBulkQuestion');
+  Route::post('/deleteOption', [App\Http\Controllers\Admin\AdminController::class, 'deleteOption'])->name('deleteOption');
+  Route::post('/updateOption', [App\Http\Controllers\Admin\AdminController::class, 'updateOption'])->name('updateOption');
+  Route::post('/deleteQuestion', [App\Http\Controllers\Admin\AdminController::class, 'deleteQuestion'])->name('deleteQuestion');
+  Route::post('/updateQuestion', [App\Http\Controllers\Admin\AdminController::class, 'updateQuestion'])->name('updateQuestion');
+  Route::post('/addOption', [App\Http\Controllers\Admin\AdminController::class, 'addOption'])->name('addOption');
+
+  Route::post('/addOption', [App\Http\Controllers\Admin\AdminController::class, 'addOption'])->name('addOption');
 
 });

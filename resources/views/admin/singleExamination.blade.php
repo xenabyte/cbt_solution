@@ -36,7 +36,7 @@
                                 <div class="card-header border-0 align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Examination Overview - {{ $examination->title }}</h4>
                                     <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePageButton">Update page button</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editExamination">Update Examination</button>
                                     </div>
                                 </div><!-- end card header -->
 
@@ -76,12 +76,79 @@
                         </div><!-- end col -->
                         <div class="col-xl-5">
                             <div class="card card-height-100">
-                                <div class="card-header border-0">
-                                    <h4 class="card-title mb-0">Examination Information</h4>
+                                <div class="card-header border-0 align-items-center d-flex">
+                                    <h4 class="card-title mb-0 flex-grow-1">Examination Information 
+                                        <button type="button" class="btn btn-primary position-relative">
+                                            Mails 
+                                        </button>
+                                    </h4>
+
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#examStatus">Update Exam Status</button>
+                                    </div>
                                 </div><!-- end cardheader -->
                                 <div class="card-body pt-0">
                                    <hr>
-                                    
+
+                                   <div class="mini-stats-wid d-flex align-items-center mt-3">
+                                        Total Examination Questions
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-1"></h6>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            {{ $examination->questions->count() }} questions
+                                        </div>
+                                   </div>
+
+                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
+                                        Questions per candidate
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-1"></h6>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            {{ $examination->question_number }} questions
+                                        </div>
+                                    </div>
+
+                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
+                                       Examination Duration
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-1"></h6>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            {{ $examination->duration }} minutes
+                                        </div>
+                                    </div>
+
+                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
+                                        Enrolled Candidates
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-1"></h6>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            {{ $examination->candidates->count() }} Candidates
+                                        </div>
+                                    </div><!-- end -->
+
+                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
+                                        Examination  Start Time
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-1"></h6>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            {{ $examination->candidates->count() }} Candidates
+                                        </div>
+                                    </div><!-- end -->
+
+                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
+                                        Timer
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-1"></h6>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            {{ $examination->candidates->count() }} Candidates
+                                        </div>
+                                    </div><!-- end -->
                                     
                                 </div><!-- end cardbody -->
                             </div><!-- end card -->
@@ -102,7 +169,7 @@
                             </div>
                         </div><!-- end card header -->
                         <div class="card-body">
-                            <table id="fixed-header" class="table table-borderedless dt-responsive nowrap table-striped align-middle" style="width:100%">
+                            <table id="buttons-datatables" class="table table-borderedless dt-responsive nowrap table-striped align-middle" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col">Id</th>
@@ -230,12 +297,12 @@
             
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover table-nowrap">
+                                <table id="example" class="table table-bordered table-hover nowrap table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th scope="col">Id</th>
                                             <th scope="col">Question</th>
-                                            <th style='width: 10%' scope="col">Options</th>
+                                            <th scope="col">Options</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
@@ -244,7 +311,7 @@
                                         <tr>
                                             <th scope="row">{{ $loop->iteration }}</th>
                                             <td>{{ $question->text }}</td>
-                                            <td style='width: 10px'>
+                                            <td>
                                                 <ul>
                                                     @foreach ($question->options as $option)
                                                     <li>
@@ -508,6 +575,93 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
 
+            <div id="examStatus" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" style="display: none;">
+                <!-- Fullscreen Modals -->
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content border-0 overflow-hidden">
+                        <div class="modal-header p-3">
+                            <h4 class="card-title mb-0">Update Exam Status</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="{{ url('/admin/examStatus') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="examination_id" value="{{ $examination->id }}">
+                                
+
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Select Status</label>
+                                    <select class="form-select" aria-label="status" name="status">
+                                        <option value= "">Select Status </option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Start">Start Exam</option>
+                                        <option value="End">End Exam</option>
+                                    </select>
+                                </div>
+
+                                <hr>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+            <div id="editExamination" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 overflow-hidden">
+                        <div class="modal-header p-3">
+                            <h4 class="card-title mb-0">Update Examination</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="{{ url('/admin/updateExamination') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name='examination_id' value="{{ $examination->id }}">
+                                
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Examination Title</label>
+                                    <input type="text" class="form-control" name="title" id="title" value="{{ $examination->title }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" id="description">{!! $examination->title !!}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="code" class="form-label">Examination Code</label>
+                                    <input type="text" class="form-control" name="code" id="code" value="{{ $examination->code }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="question" class="form-label">Examination Question Quantity</label>
+                                    <input type="number" class="form-control" name="question_number" id="question" value="{{ $examination->question_number }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="duration" class="form-label">Examination Duration (In Minutes)</label>
+                                    <input type="number" class="form-control" name="duration" id="duration" value="{{ $examination->duration }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="mark" class="form-label">Mark per question</label>
+                                    <input type="number" class="form-control" name="mark" id="mark" value="{{ $examination->mark }}">
+                                </div>
+
+                                <hr>
+                                <button type="submit" class="btn btn-info w-100">Save Changes</button>
+        
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         
 
 @include('admin.adminIncludes.footer')

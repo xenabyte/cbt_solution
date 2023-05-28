@@ -22,6 +22,7 @@ class CreateExaminationsTable extends Migration
             $table->integer('duration')->nullable();
             $table->integer('mark')->nullable();
             $table->string('status')->nullable();
+            $table->dateTime('exam_start_at')->nullable();
             $table->string('question_number')->nullable();
             $table->string('slug')->nullable();
             $table->softDeletes();

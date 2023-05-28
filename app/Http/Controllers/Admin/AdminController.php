@@ -14,6 +14,7 @@ use League\Csv\Reader;
 use Illuminate\Database\QueryException;
 
 use Log;
+use Carbon\Carbon;
 
 use App\Models\Admin;
 use App\Models\Examination;
@@ -550,6 +551,189 @@ class AdminController extends Controller
             return redirect()->back();
         }
     }
+
+    public function deleteQuestion(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'question_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$question = Question::find($request->question_id)){
+            alert()->error('Oops', 'Invalid Question')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($question->delete()){
+            alert()->success('Record Deleted', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function deleteOption(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'option_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$option = Option::find($request->option_id)){
+            alert()->error('Oops', 'Invalid Option')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($option->is_correct){
+            if(Option::where('question_id',$option->question_id)->count() < 1){
+                alert()->error('Oops', 'You cannot delete answer to the question, kindly set another option as answer or add correct answer before deleting this option')->persistent('Close');
+                return redirect()->back();
+            }
+        }
+
+        if($option->delete()){
+            alert()->success('Record Deleted', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+    
+    public function updateQuestion(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'question_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$question = Question::find($request->question_id)){
+            alert()->error('Oops', 'Invalid Question')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!empty($request->text) && $request->text != $question->text){
+            $question->text = $request->text;
+        }
+
+        if($question->save()){
+            alert()->success('Changes Saved', 'Question changes saved successfully')->persistent('Close');
+            return redirect()->back();
+        }
+        
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function updateOption(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'option_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$option = Option::find($request->option_id)){
+            alert()->error('Oops', 'Invalid Option')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!empty($request->option_text) && $request->option_text != $option->option_text){
+            $option->option_text = $request->option_text;
+        }
+
+        if($request->is_correct != $option->is_correct){
+            $option->is_correct = $request->is_correct;
+        }
+
+        if($option->save()){
+            alert()->success('Changes Saved', 'Option changes saved successfully')->persistent('Close');
+            return redirect()->back();
+        }
+        
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function addOption(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'question_id' => 'required|min:1',
+            'option_text' => 'required',
+            'is_correct' => 'nullable'
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$question = Question::find($request->question_id)){
+            alert()->error('Oops', 'Invalid Question')->persistent('Close');
+            return redirect()->back();
+        }
+
+        $addOption = ([
+            'question_id' => $request->question_id,
+            'is_correct' => $request->is_correct,
+            'option_text' => $request->option_text
+        ]);
+
+        if(Option::create($addOption)){
+            alert()->success('Option added successfully', '')->persistent('Close');
+            return redirect()->back();
+        }
+        
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
     
 
+    public function examStatus(Request $request){
+        $validator = Validator::make($request->all(), [
+            'examination_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$examination = Examination::find($request->examination_id)){
+            alert()->error('Oops', 'Invalid Examination')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!empty($request->status) &&  $request->status != $examination->status){
+            if($request->status == 'Start'){
+                $examination->start_exam_at = Carbon::now();
+            }
+
+            $examination->status = $request->status;
+        }
+
+        if($examination->save()){
+            alert()->success('Changes Saved', 'Status Updated')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
 }

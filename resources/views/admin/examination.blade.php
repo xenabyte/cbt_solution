@@ -97,6 +97,8 @@
                                                             <input type="number" class="form-control" name="mark" id="mark" value="{{ $examination->mark }}">
                                                         </div>
                                 
+                                                        <hr>
+                                                        <button type="submit" class="btn btn-info w-100">Save Changes</button>
                                                     </form>
                                                 </div>
                                             </div><!-- /.modal-content -->
