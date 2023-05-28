@@ -21,6 +21,9 @@ class CreateCandidateQuestionsTable extends Migration
             $table->string('candidate_is_correct')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('candidate_id')->references('id')->on('candidates')->onDelete('cascade');
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
         });
     }
 

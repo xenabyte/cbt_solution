@@ -481,6 +481,75 @@ class AdminController extends Controller
         alert()->error('Oops!', 'Something went wrong')->persistent('Close');
         return redirect()->back();
     }
+
+    public function uploadBulkQuestion(Request $request){
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'file' => 'required',
+                'examination_id' => 'required',
+            ]);
+    
+            if($validator->fails()) {
+                alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+                return redirect()->back();
+            }
+    
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+    
+                // Create a CSV reader instance
+                $csv = Reader::createFromPath($file->getPathname());
+    
+                // Set the header offset (skip the first row)
+                $csv->setHeaderOffset(0);
+    
+                // Get all records from the CSV file
+                $records = $csv->getRecords();
+    
+                foreach ($records as $row) {
+
+                    if(!empty($row['question_text'])){
+                        $questionData = [
+                            'text' => $row['question_text'],
+                            'examination_id' => $request->examination_id,
+                        ];
+    
+            
+                        $optionsData = [];
+                        $isCorrectOptionSet = false;
+    
+                        foreach ($row as $key => $value) {
+                            if (strpos($key, 'option_') === 0 && !empty($value)) {
+                                $optionData = [
+                                    'option_text' => $value,
+                                    'is_correct' => ($value === $row['answer']) ? 1 : 0,
+                                ];
+
+                                if ($optionData['is_correct']) {
+                                    $isCorrectOptionSet = true;
+                                }
+            
+                                $optionsData[] = $optionData;
+                            }
+                        }
+            
+                        if ($isCorrectOptionSet) {
+                            $question = Question::create($questionData);
+                            $question->options()->createMany($optionsData);
+                        }
+                    }
+                }
+    
+                alert()->success('Changes Saved', 'Examination question uploaded successfully')->persistent('Close');
+                return redirect()->back();
+            }
+        } catch (QueryException $e) {
+            $errorMessage = 'Something went wrong';
+            alert()->error('Oops!', $errorMessage)->persistent('Close');
+            return redirect()->back();
+        }
+    }
     
 
 }

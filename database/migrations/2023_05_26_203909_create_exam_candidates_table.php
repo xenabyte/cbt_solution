@@ -20,6 +20,9 @@ class CreateExamCandidatesTable extends Migration
             $table->string('result')->nulllable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('examination_id')->references('id')->on('examinations')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

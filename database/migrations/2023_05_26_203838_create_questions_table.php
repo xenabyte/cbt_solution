@@ -19,6 +19,8 @@ class CreateQuestionsTable extends Migration
             $table->string('text')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('examination_id')->references('id')->on('examinations')->onDelete('cascade');
         });
     }
 

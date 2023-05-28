@@ -49,5 +49,8 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/addSingleCandidate', [App\Http\Controllers\Admin\AdminController::class, 'addSingleCandidate'])->name('addSingleCandidate');
   Route::post('/addBulkCandidate', [App\Http\Controllers\Admin\AdminController::class, 'addBulkCandidate'])->name('addBulkCandidate');
   Route::post('/deleteCandidate', [App\Http\Controllers\Admin\AdminController::class, 'deleteCandidate'])->name('deleteCandidate');
+  
+
+  Route::post('/uploadBulkQuestion', [App\Http\Controllers\Admin\AdminController::class, 'uploadBulkQuestion'])->name('uploadBulkQuestion');
 
 });

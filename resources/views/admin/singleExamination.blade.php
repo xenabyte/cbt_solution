@@ -80,10 +80,9 @@
                                     <h4 class="card-title mb-0">Examination Information</h4>
                                 </div><!-- end cardheader -->
                                 <div class="card-body pt-0">
-                                    <h6 class="fw-semibold text-muted">Examination informations</h6>
-                                    <hr>
+                                   <hr>
                                     
-
+                                    
                                 </div><!-- end cardbody -->
                             </div><!-- end card -->
                         </div>
@@ -112,6 +111,7 @@
                                         <th scope="col">Email</th>
                                         <th scope="col">Matric Number</th>
                                         <th scope="col">Registration Number</th>
+                                        <th scope="col">Result</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -124,6 +124,7 @@
                                         <td>{{ $candidate->student->email }}</td>
                                         <td>{{ $candidate->student->matric_number }} </td>
                                         <td>{{ $candidate->student->reg_number }} </td>
+                                        <td>{{ $candidate->result }} </td>
                                         <td>
                                             <div class="hstack gap-3 fs-15">
                                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteCandidate{{$candidate->id}}" class="link-danger"><i class="ri-delete-bin-5-line"></i></a>
@@ -223,11 +224,198 @@
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Examination Questions</h4>
                             <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHistory">Add History</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadBulkQuestion">Upload Question</button>
                             </div>
                         </div><!-- end card header -->
+            
                         <div class="card-body">
-                            
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover table-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Question</th>
+                                            <th style='width: 10%' scope="col">Options</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($examination->questions as $question)
+                                        <tr>
+                                            <th scope="row">{{ $loop->iteration }}</th>
+                                            <td>{{ $question->text }}</td>
+                                            <td style='width: 10px'>
+                                                <ul>
+                                                    @foreach ($question->options as $option)
+                                                    <li>
+                                                        {{ $option->option_text }} @if($option->is_correct)(A)@endif
+                                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteOption{{$option->id}}" class="link-danger"><i class="ri-delete-bin-5-line"></i></a>
+                                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editOption{{$option->id}}" class="link-primary"><i class="ri-edit-circle-fill"></i></a>
+
+                                                        <div id="deleteOption{{$option->id}}" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body text-center p-5">
+                                                                        <div class="text-end">
+                                                                            <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="mt-2">
+                                                                            <lord-icon src="https://cdn.lordicon.com/wwneckwc.json" trigger="hover" style="width:150px;height:150px">
+                                                                            </lord-icon>
+                                                                            <h4 class="mb-3 mt-4">Are you sure you want to delete <br> {{ $option->option_text }}?</h4>
+                                                                            <form action="{{ url('/admin/deleteOption') }}" method="POST">
+                                                                                @csrf
+                                                                                <input name="option_id" type="hidden" value="{{$option->id}}">
+        
+                                                                                <hr>
+                                                                                <button type="submit" class="btn btn-danger w-100">Yes, Delete</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer bg-light p-3 justify-content-center">
+        
+                                                                    </div>
+                                                                </div><!-- /.modal-content -->
+                                                            </div><!-- /.modal-dialog -->
+                                                        </div><!-- /.modal -->
+
+                                                        <div id="editOption{{$option->id}}" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content border-0 overflow-hidden">
+                                                                    <div class="modal-header p-3">
+                                                                        <h4 class="card-title mb-0">Edit Option</h4>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                            
+                                                                    <div class="modal-body">
+                                                                        <form action="{{ url('/admin/updateOption') }}" method="post" enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            <input name="option_id" type="hidden" value="{{$option->id}}">
+
+                                                                            <div class="mb-3">
+                                                                                <label for="optin" class="form-label">Option</label>
+                                                                                <input type="text" class="form-control" name="option_text" id="option" value="{{ $option->option_text }}">
+                                                                            </div>
+                                            
+                                                                            <div class="form-check form-switch">
+                                                                                <input class="form-check-input" type="checkbox" name="is_correct" role="switch" @if($option->is_correct) checked @endif />
+                                                                                <span class="text-primary"> Set as correct answer</span>
+                                                                            </div>
+
+                                                                            <hr>
+                                                                            <div class="text-end">
+                                                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div><!-- /.modal-content -->
+                                                            </div><!-- /.modal-dialog -->
+                                                        </div><!-- /.modal -->
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="hstack gap-3 fs-15">
+                                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteQuestion{{$question->id}}" class="link-danger"><i class="ri-delete-bin-5-line"></i></a>
+                                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editQuestion{{$question->id}}" class="link-primary"><i class="ri-edit-circle-fill"></i></a>
+                                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addOption{{$question->id}}" class="link-success"><i class="ri-menu-add-fill"></i></a>
+
+                                                    <div id="deleteQuestion{{$question->id}}" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body text-center p-5">
+                                                                    <div class="text-end">
+                                                                        <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="mt-2">
+                                                                        <lord-icon src="https://cdn.lordicon.com/wwneckwc.json" trigger="hover" style="width:150px;height:150px">
+                                                                        </lord-icon>
+                                                                        <h4 class="mb-3 mt-4">Are you sure you want to delete <br> {{ $question->text }}?</h4>
+                                                                        <form action="{{ url('/admin/deleteQuestion') }}" method="POST">
+                                                                            @csrf
+                                                                            <input name="question_id" type="hidden" value="{{$question->id}}">
+
+                                                                            <hr>
+                                                                            <button type="submit" class="btn btn-danger w-100">Yes, Delete</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer bg-light p-3 justify-content-center">
+
+                                                                </div>
+                                                            </div><!-- /.modal-content -->
+                                                        </div><!-- /.modal-dialog -->
+                                                    </div><!-- /.modal -->
+
+                                                    <div id="editQuestion{{$question->id}}" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content border-0 overflow-hidden">
+                                                                <div class="modal-header p-3">
+                                                                    <h4 class="card-title mb-0">Edit Question</h4>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                        
+                                                                <div class="modal-body">
+                                                                    <form action="{{ url('/admin/updateQuestion') }}" method="post" enctype="multipart/form-data">
+                                                                        @csrf
+                                        
+                                                                        <input name="question_id" type="hidden" value="{{$question->id}}">
+
+                                                                        <div class="mb-3">
+                                                                            <label for="question" class="form-label">Question</label>
+                                                                            <input type="text" class="form-control" name="text" id="question" value="{{ $question->text }}">
+                                                                        </div>
+                                        
+                                                                        <hr>
+                                                                        <div class="text-end">
+                                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div><!-- /.modal-content -->
+                                                        </div><!-- /.modal-dialog -->
+                                                    </div><!-- /.modal -->
+
+                                                    <div id="addOption{{$question->id}}" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content border-0 overflow-hidden">
+                                                                <div class="modal-header p-3">
+                                                                    <h4 class="card-title mb-0">Add Option</h4>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                        
+                                                                <div class="modal-body">
+                                                                    <form action="{{ url('/admin/addOption') }}" method="post" enctype="multipart/form-data">
+                                                                        @csrf
+                                        
+                                                                        <input name="question_id" type="hidden" value="{{$question->id}}">
+                                                                        <div class="mb-3">
+                                                                            <label for="option" class="form-label">Option</label>
+                                                                            <input type="text" class="form-control" name="option_text" id="option">
+                                                                        </div>
+                                        
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input" type="checkbox" name="is_correct" role="switch" />
+                                                                            <span class="text-primary"> Set as correct answer</span>
+                                                                        </div>
+                                        
+                                                                        <hr>
+                                                                        <div class="text-end">
+                                                                            <button type="submit" class="btn btn-primary">Add Option</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div><!-- /.modal-content -->
+                                                        </div><!-- /.modal-dialog -->
+                                                    </div><!-- /.modal -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div><!-- end cardbody -->
                     </div><!-- end card -->
                 </div><!-- end col --> 
@@ -253,6 +441,33 @@
                                 <hr>
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-primary">Upload Bulk Candidates</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+            <div id="uploadBulkQuestion" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 overflow-hidden">
+                        <div class="modal-header p-3">
+                            <h4 class="card-title mb-0">Upload Examination Question</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="{{ url('/admin/uploadBulkQuestion') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="examination_id" value="{{ $examination->id }}">
+                                <div class="mb-3">
+                                    <label for="file" class="form-label">File(CSV)</label>
+                                    <input type="file" class="form-control" name="file" id="type">
+                                </div>
+
+                                <hr>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">Upload Question</button>
                                 </div>
                             </form>
                         </div>

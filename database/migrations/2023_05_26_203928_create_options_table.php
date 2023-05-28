@@ -20,6 +20,8 @@ class CreateOptionsTable extends Migration
             $table->integer('is_correct')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
         });
     }
 
