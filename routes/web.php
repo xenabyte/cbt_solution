@@ -79,5 +79,9 @@ Route::group(['prefix' => 'cbt'], function () {
   Route::get('/exams', [App\Http\Controllers\CBT\HomeController::class, 'index']);
   Route::get('/takeExam/{slug}', [App\Http\Controllers\CBT\HomeController::class, 'takeExam']);
 
+  Route::post('/startExam', [App\Http\Controllers\CBT\HomeController::class, 'startExam'])->name('startExam');
+  Route::post('/saveOption', [App\Http\Controllers\CBT\HomeController::class, 'saveOption'])->name('saveOption');
+  Route::post('/forceSubmit', [App\Http\Controllers\CBT\HomeController::class, 'forceSubmit'])->name('forceSubmit');
+  Route::post('/submitExam', [App\Http\Controllers\CBT\HomeController::class, 'submitExam'])->name('submitExam');
 
 });

@@ -17,7 +17,10 @@ class Candidate extends Model
      */
     protected $fillable = [
         'student_id', 
-        'examination_id', 
+        'examination_id',
+        'exam_start_at',
+        'exam_end_at',
+        'status', 
         'result'
     ];
 

@@ -36,7 +36,6 @@
                                             <h5 class="fs-14">Examination Instruction</h5>
 
                                             <div class="card-body pt-0">
-             
                                                 <div class="mini-stats-wid d-flex align-items-center mt-3">
                                                     Total Questions
                                                     <div class="flex-grow-1 ms-3">
@@ -58,8 +57,10 @@
                                                 </div>
             
                                                 <hr>
-                                                <form action="{{ url('cbt/startExam') }}" method="POST">
+                                                <form action="{{ url('/cbt/startExam') }}" method="POST">
+                                                    @csrf
                                                     <input type="hidden" name="examination_id" value="{{$examination->id}}" />
+                                                    <input type="hidden" name="candidate_id" value="{{$candidate->id}}" />
 
                                                     <button type="submit" class="btn btn-success">Start Exam</button>
                                                 </form>

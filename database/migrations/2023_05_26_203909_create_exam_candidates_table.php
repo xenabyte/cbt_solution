@@ -18,6 +18,9 @@ class CreateExamCandidatesTable extends Migration
             $table->integer('student_id')->nullable();
             $table->integer('examination_id')->nullable();
             $table->integer('result')->nullable();
+            $table->string('status')->nullable();
+            $table->dateTime('exam_start_at')->nullable();
+            $table->dateTime('exam_end_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

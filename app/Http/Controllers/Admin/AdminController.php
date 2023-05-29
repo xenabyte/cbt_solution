@@ -104,7 +104,6 @@ class AdminController extends Controller
             return redirect()->back();
         }
 
-
         if(!$examination = Examination::find($request->examination_id)){
             alert()->error('Oops', 'Invalid Examination')->persistent('Close');
             return redirect()->back();
