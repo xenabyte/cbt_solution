@@ -26,6 +26,7 @@ use App\Models\Student;
 
 class HomeController extends Controller
 {
+    protected $authUser;
     //
      /**
      * Create a new controller instance.
@@ -38,7 +39,18 @@ class HomeController extends Controller
 
     public function index(){
 
-        Log::info(Auth::guard('student')->user());
-        return view('exams');
+        $candidates = Candidate::with('student', 'examination')->where('student_id', Auth::guard('student')->user()->id)->where('result', null)->get();
+        return view('exams', [
+            'candidates' => $candidates
+        ]);
+    }
+
+    public function takeExam($slug){
+          
+        $examination = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->where('slug', $slug)->first();
+
+        return view('takeExam', [
+            'examination' => $examination
+        ]);
     }
 }

@@ -77,5 +77,7 @@ Route::group(['prefix' => 'student'], function () {
 
 Route::group(['prefix' => 'cbt'], function () {
   Route::get('/exams', [App\Http\Controllers\CBT\HomeController::class, 'index']);
+  Route::get('/takeExam/{slug}', [App\Http\Controllers\CBT\HomeController::class, 'takeExam']);
+
 
 });
