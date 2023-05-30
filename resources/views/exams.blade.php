@@ -29,8 +29,8 @@
                                 <!-- Rounded Ribbon -->
                                 <div class="card ribbon-box border mb-lg-0">
                                     <div class="card-body">
-                                        <div class="ribbon ribbon-primary round-shape">Active Examinations</div>
-                                        <h5 class="fs-14 text-end">Your Active Examinations</h5>
+                                        <div class="ribbon ribbon-primary round-shape">Active Assessments</div>
+                                        <h5 class="fs-14 text-end">Your Active Assessments</h5>
                                         <hr>
                                         <div class="ribbon-content mt-5 text-muted">
                                             @if($candidates->count() > 0)
@@ -39,7 +39,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col" style="width: 50%;">
-                                                                Examinations
+                                                                Assessments
                                                             </th>
                                                             <th scope="col" class="text-center">
                                                                 
@@ -54,7 +54,7 @@
                                                                 {{ ucwords($candidate->examination->title) }} ({{ $candidate->examination->code }})
                                                             </td>
                                                             <td class="text-end">
-                                                                <a href="{{ url('cbt/takeExam/'.$candidate->examination->slug)  }}" class="btn btn-primary btn-sm">Take Exam</a>
+                                                                <a href="{{ url('cbt/takeExam/'.$candidate->examination->slug)  }}" class="btn btn-primary btn-sm">Take Assessment</a>
                                                             </td>
                                                             @endforeach
                                                         </tr>
@@ -68,7 +68,7 @@
                                                         <i class=" ri-close-circle-line"></i>
                                                     </div>
                                                 </div>
-                                                <h4 class="card-title">No active examination</h4>
+                                                <h4 class="card-title">No active assessment</h4>
                                                 <p class="card-text text-muted">If you are sure to write exam, kindly inform the administrator.</p>
                                             </div>
                                             @endif

@@ -39,7 +39,7 @@ class HomeController extends Controller
 
     public function index(){
 
-        $candidates = Candidate::with('student', 'examination')->where('student_id', Auth::guard('student')->user()->id)->where('result', null)->get();
+        $candidates = Candidate::with('student', 'examination')->where('student_id', Auth::guard('student')->user()->id)->where('status', null)->get();
         return view('exams', [
             'candidates' => $candidates
         ]);
@@ -48,11 +48,19 @@ class HomeController extends Controller
     public function takeExam($slug){
         $userId = Auth::guard('student')->user()->id;
         $examination = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->where('slug', $slug)->first();
-        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $examination->id)->where('result', null)->first();
+        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $examination->id)->where('status', null)->first();
+
+        $candidateQuestions = CandidateQuestion::with('candidate', 'candidate.student', 'question', 'question.options')
+        ->where('candidate_id', $candidate->id)
+        ->get()
+        ->each(function ($candidateQuestion) {
+            $candidateQuestion->question->options = $candidateQuestion->question->options->shuffle();
+        });
 
         return view('takeExam', [
             'examination' => $examination,
-            'candidate' => $candidate
+            'candidate' => $candidate,
+            'candidateQuestions' => $candidateQuestions
         ]);
     }
 
@@ -76,7 +84,7 @@ class HomeController extends Controller
             alert()->error('Oops', 'Invalid Candidate')->persistent('Close');
             return redirect()->back();
         }
-
+        
         $candidateQuestions = CandidateQuestion::with('candidate', 'candidate.student', 'question', 'question.options')
         ->where('candidate_id', $candidate->id)
         ->get()
@@ -86,11 +94,7 @@ class HomeController extends Controller
 
 
         if($candidateQuestions->count() >= $examination->question_number) {
-            return view('examination', [
-                'examination' => $examination,
-                'candidate' => $candidate,
-                'candidateQuestions' => $candidateQuestions
-            ]);
+            return redirect()->back();
         }
 
         // set candidate question
@@ -110,17 +114,13 @@ class HomeController extends Controller
             $candidateQuestion->question->options = $candidateQuestion->question->options->shuffle();
         });
 
-        $start = Carbon::now();
-        $end = $start->addMinutes($examination->duration);
+        $start = Carbon::parse();
+        $end = Carbon::parse()->addMinutes($examination->duration);
         $candidate->exam_start_at = $start;
         $candidate->exam_end_at = $end;
         $candidate->save();
 
-        return view('examination', [
-            'examination' => $examination,
-            'candidate' => $candidate,
-            'candidateQuestions' => $candidateQuestions
-        ]);
+        return redirect()->back();
     }
 
     public function saveOption(Request $request){
@@ -161,10 +161,12 @@ class HomeController extends Controller
             return redirect()->back();
         }
 
+        Log::info('im here');
+        
         $userId = Auth::guard('student')->user()->id;
         $examination = Examination::find($request->examinationId);
-        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $examinationId)->first();
-        $candidateCorrectQuestion = CandidateQuestion::where('candidate_id', $candidateQuestion->candidate_id)->where('candidate_is_correct', 1)->count();
+        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $request->examinationId)->first();
+        $candidateCorrectQuestion = CandidateQuestion::where('candidate_id', $candidate->id)->where('candidate_is_correct', 1)->count();
         $result = $candidateCorrectQuestion * $examination->mark;
         $candidate->result = $result;
         $candidate->status = 'Force submitted';
@@ -186,11 +188,10 @@ class HomeController extends Controller
             return redirect()->back();
         }
 
-
         $userId = Auth::guard('student')->user()->id;
         $examination = Examination::find($request->examinationId);
-        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $examinationId)->first();
-        $candidateCorrectQuestion = CandidateQuestion::where('candidate_id', $candidateQuestion->candidate_id)->where('candidate_is_correct', 1)->count();
+        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $request->examinationId)->first();
+        $candidateCorrectQuestion = CandidateQuestion::where('candidate_id', $candidate->id)->where('candidate_is_correct', 1)->count();
         $result = $candidateCorrectQuestion * $examination->mark;
         $candidate->result = $result;
         $candidate->status = 'Submitted';
