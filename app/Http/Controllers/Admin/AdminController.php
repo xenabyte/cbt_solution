@@ -41,7 +41,13 @@ class AdminController extends Controller
 
     public function index(){
 
-        return view('admin.home');
+        $examinations = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->get();
+        $students = Student::all();
+
+        return view('admin.home', [
+            'examinations' => $examinations,
+            'students' => $students
+        ]);
     }
 
     public function examinations(){
