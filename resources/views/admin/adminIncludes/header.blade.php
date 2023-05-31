@@ -171,6 +171,22 @@
                 </li> <!-- end Dashboard Menu -->
 
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#media" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                        <i class="mdi mdi-account-box-multiple"></i> <span data-key="t-forms">Students</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="media">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('admin/students') }}"
+                                    data-key="t-profile">Students
+                                </a>
+                            </li>   
+                        </ul>
+
+                    </div>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#siteSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
                         <i class="mdi mdi-database-settings"></i> <span data-key="t-forms">Examination</span>
                     </a>
@@ -186,21 +202,6 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#media" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
-                        <i class="mdi mdi-camera-image"></i> <span data-key="t-forms">Students</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="media">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link menu-link" href="{{ url('admin/students') }}"
-                                    data-key="t-profile">Students
-                                </a>
-                            </li>   
-                        </ul>
-
-                    </div>
-                </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ url('admin/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

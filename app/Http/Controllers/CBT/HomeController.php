@@ -84,6 +84,11 @@ class HomeController extends Controller
             alert()->error('Oops', 'Invalid Candidate')->persistent('Close');
             return redirect()->back();
         }
+
+        if($examination->status != 'Start'){
+            alert()->error('Oops', 'You cant start the assessment yet.')->persistent('Close');
+            return redirect()->back();
+        }
         
         $candidateQuestions = CandidateQuestion::with('candidate', 'candidate.student', 'question', 'question.options')
         ->where('candidate_id', $candidate->id)
@@ -151,7 +156,7 @@ class HomeController extends Controller
     }
 
     public function forceSubmit(Request $request){
-        
+
         $userId = Auth::guard('student')->user()->id;
         $examination = Examination::find($request->examinationId);
         $candidate = Candidate::where('student_id', $userId)->where('examination_id', $request->examinationId)->first();

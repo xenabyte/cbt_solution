@@ -77,10 +77,19 @@
                         <div class="col-xl-5">
                             <div class="card card-height-100">
                                 <div class="card-header border-0 align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Examination Information 
-                                        <button type="button" class="btn btn-primary position-relative">
-                                            Mails 
-                                        </button>
+                                    <h4 class="card-title mb-0 flex-grow-1">Examination Information
+                                        @if($examination->status == 'Active') 
+                                            <button type="button" class="btn btn-primary position-relative">{{ $examination->status }}</button>
+                                        @endif
+                                        @if($examination->status == 'Inactive') 
+                                            <button type="button" class="btn btn-warning position-relative">{{ $examination->status }}</button>
+                                        @endif
+                                        @if($examination->status == 'Start') 
+                                            <button type="button" class="btn btn-success position-relative">{{ $examination->status }}</button>
+                                        @endif
+                                        @if($examination->status == 'End') 
+                                            <button type="button" class="btn btn-danger position-relative">{{ $examination->status }}</button>
+                                        @endif
                                     </h4>
 
                                     <div class="flex-shrink-0">

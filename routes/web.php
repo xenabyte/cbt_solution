@@ -59,6 +59,8 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/addOption', [App\Http\Controllers\Admin\AdminController::class, 'addOption'])->name('addOption');
 
   Route::post('/addOption', [App\Http\Controllers\Admin\AdminController::class, 'addOption'])->name('addOption');
+  Route::post('/examStatus', [App\Http\Controllers\Admin\AdminController::class, 'examStatus'])->name('examStatus');
+
 
 });
 
