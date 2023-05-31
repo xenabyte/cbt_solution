@@ -11,7 +11,7 @@
     <meta content="Oladipo Damilare(KoderiaNG)" name="author" />
     <meta name="robots" content="noindex">
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Layout config Js -->
     <script src="{{asset('assets/js/layout.js')}}"></script>

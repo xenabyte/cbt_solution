@@ -1,5 +1,5 @@
 @include('cbt.cbtIncludes.header')
-<?= $user = Auth::guard('student')->user() ?>
+<?php $user = Auth::guard('student')->user() ?>
 
     <!-- ============================================================== -->
     <!-- Start right Content here -->

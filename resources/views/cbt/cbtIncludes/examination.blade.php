@@ -219,6 +219,7 @@
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(x);
+            console.log(distance);
             // Call a function to submit the exam
             submitExam();
         }
@@ -231,10 +232,16 @@
         })
         .then(function (response) {
             // Successful response handling if needed
+            redirectToURL("{{ env('APP_URL') }}");
         })
         .catch(function (error) {
             console.log(error);
         });
     }
+
+    function redirectToURL(url) {
+        window.location.href = url;
+    }
+
 
 </script>

@@ -11,7 +11,7 @@
     <meta content="Oladipo Damilare(KoderiaNG)" name="author" />
     <meta name="robots" content="noindex">
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -61,7 +61,7 @@
                             <img src="{{asset('asset/images/logo.png')}}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{asset('assets/images/logo.png')}}" alt="" height="80">
+                            <img src="{{asset('assets/images/logo-dark.png')}}" alt="" height="50">
                         </span>
                     </a>
 

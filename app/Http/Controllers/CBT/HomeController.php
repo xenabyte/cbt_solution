@@ -151,17 +151,6 @@ class HomeController extends Controller
     }
 
     public function forceSubmit(Request $request){
-        $validator = Validator::make($request->all(), [
-            'candidateId' => 'required|min:1',
-            'examinationId' => 'required|min:1',
-        ]);
-
-        if($validator->fails()) {
-            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
-            return redirect()->back();
-        }
-
-        Log::info('im here');
         
         $userId = Auth::guard('student')->user()->id;
         $examination = Examination::find($request->examinationId);
