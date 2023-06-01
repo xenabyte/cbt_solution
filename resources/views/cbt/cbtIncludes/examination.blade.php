@@ -38,7 +38,7 @@
 
                                     <div class="tab-content mt-5">
                                         @foreach($candidateQuestions as $candidateQuestion)
-                                        <div class="tab-pane fade @if($loop->iteration == 1) show active @endif" id="question{{$candidateQuestion->id}}-tab" role="tabpanel" aria-labelledby="question1">
+                                        <div class="tab-pane fade @if($loop->iteration == 1) show active @endif" id="question{{$loop->iteration}}-tab" role="tabpanel" aria-labelledby="question1">
                                             <div>
                                                 <div class="row">
                                                     <div class="col-lg-12 mb-5">
