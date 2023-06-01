@@ -146,8 +146,6 @@
                                         </tbody>
                                     </table>
 
-                                    <hr>
-
                                     <div class="text-end">
                                         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addSingleStudent" class="btn btn-primary">Add Single Student</a>
                                     </div>
