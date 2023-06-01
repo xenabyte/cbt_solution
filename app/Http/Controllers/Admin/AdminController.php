@@ -747,4 +747,142 @@ class AdminController extends Controller
         alert()->error('Oops!', 'Something went wrong')->persistent('Close');
         return redirect()->back();
     }
+
+    public function media(){
+        $media = Media::get();
+
+        return view('admin.media', [
+            'media' => $media
+        ]);
+    }
+
+    public function addMedia(Request $request){
+        $validator = Validator::make($request->all(), [
+            'filename' => 'required',
+            'file' => 'required',
+            'type' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->filename)));
+
+        $fileUrl = 'uploads/media/'.$slug.'.'.$request->file('file')->getClientOriginalExtension();
+        $file = $request->file('file')->move('uploads/media', $fileUrl);
+
+        // Get the size of the file in bytes
+        $fileSize = File::size($fileUrl);
+
+        // Convert the size to KB or MB
+        if ($fileSize < 1024) {
+            $fileSize = $fileSize . ' B';
+        } elseif ($fileSize < 1048576) {
+            $fileSize = round($fileSize / 1024, 2) . ' KB';
+        } else {
+            $fileSize = round($fileSize / 1048576, 2) . ' MB';
+        }
+
+        $addFile = ([            
+            'filename' => $request->filename,
+            'filepath' => $fileUrl,
+            'type' => $request->type,
+            'size' => $fileSize,
+        ]);
+
+        if(Media::create($addFile)){
+            alert()->success('File uploaded successfully', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function updateFile(Request $request){
+        $validator = Validator::make($request->all(), [
+            'media_id' => 'required|min:1',
+        ]);
+
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$media = Media::find($request->media_id)){
+            alert()->error('Oops', 'Invalid Media ')->persistent('Close');
+            return redirect()->back();
+        }
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->filename)));
+
+        if(!empty($request->filename) &&  $request->filename != $media->filename){
+            $media->filename = $request->filename;
+        }
+
+        if(!empty($request->type) &&  $request->type != $media->type){
+            $media->type = $request->type;
+        }
+
+        if(!empty($request->file)){
+            if(!empty($media->filepath)){
+                //unlink($media->image);
+            }
+
+            $fileUrl = 'uploads/media/'.$slug.'.'.$request->file('file')->getClientOriginalExtension();
+            $file = $request->file('file')->move('uploads/media', $fileUrl);
+
+            // Get the size of the file in bytes
+            $fileSize = File::size($fileUrl);
+
+            // Convert the size to KB or MB
+            if ($fileSize < 1024) {
+                $fileSize = $fileSize . ' B';
+            } elseif ($fileSize < 1048576) {
+                $fileSize = round($fileSize / 1024, 2) . ' KB';
+            } else {
+                $fileSize = round($fileSize / 1048576, 2) . ' MB';
+            }
+
+            $media->size = $fileSize;
+            $media->filepath = $fileUrl;
+        }
+
+        if($media->save()){
+            alert()->success('Changes Saved', 'File changes saved successfully')->persistent('Close');
+            return redirect()->back();
+        }
+    }
+
+    public function deleteMedia(Request $request){
+        $validator = Validator::make($request->all(), [
+            'media_id' => 'required|min:1',
+        ]);
+
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$media = Media::find($request->media_id)){
+            alert()->error('Oops', 'Invalid Media ')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($media->delete()){ 
+            if(!empty($media->file)){
+                //unlink($slider->image);
+            }
+            alert()->success('Record Deleted', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
 }

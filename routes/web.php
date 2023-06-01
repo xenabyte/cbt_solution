@@ -61,6 +61,11 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/addOption', [App\Http\Controllers\Admin\AdminController::class, 'addOption'])->name('addOption');
   Route::post('/examStatus', [App\Http\Controllers\Admin\AdminController::class, 'examStatus'])->name('examStatus');
 
+  Route::get('/media', [App\Http\Controllers\Admin\AdminController::class, 'media']);
+  Route::post('/addMedia', [App\Http\Controllers\Admin\AdminController::class, 'addMedia'])->name('addMedia');
+  Route::post('/updateMedia', [App\Http\Controllers\Admin\AdminController::class, 'updateMedia'])->name('updateMedia');
+  Route::post('/deleteMedia', [App\Http\Controllers\Admin\AdminController::class, 'deleteMedia'])->name('deleteMedia');
+
 
 });
 

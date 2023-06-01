@@ -188,13 +188,29 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#siteSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
-                        <i class="mdi mdi-database-settings"></i> <span data-key="t-forms">Examination</span>
+                        <i class="mdi mdi-database-settings"></i> <span data-key="t-forms">Assessment</span>
                     </a>
                     <div class="collapse menu-dropdown" id="siteSettings">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{ url('admin/examinations') }}"
-                                    data-key="t-profile">Examination
+                                    data-key="t-profile">Assessment
+                                </a>
+                            </li>   
+                        </ul>
+
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#media" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                        <i class="mdi mdi-camera-image"></i> <span data-key="t-forms">Media Files</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="media">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('admin/media') }}"
+                                    data-key="t-profile">Media Files
                                 </a>
                             </li>   
                         </ul>

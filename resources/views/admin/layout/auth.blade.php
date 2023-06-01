@@ -61,14 +61,14 @@
                                                     </div>
                                                     <div class="carousel-inner text-center text-white pb-5">
                                                         <div class="carousel-item active">
-                                                            <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                            <p class="fs-15 fst-italic">"Transform assessments with our advanced CBT software - efficient, secure, and error-free."</p>
                                                         </div>
                                                         <div class="carousel-item">
-                                                            <p class="fs-15 fst-italic">" The theme is really great with an amazing customer support."</p>
+                                                            <p class="fs-15 fst-italic">"Experience the future of exams with our user-friendly CBT software - streamline assessments, boost performance."</p>
                                                         </div>
                                                         <div class="carousel-item">
-                                                            <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
-                                                        </div>j
+                                                            <p class="fs-15 fst-italic">"Unlock a new era of exams with our cutting-edge CBT software - seamless, time-saving, accurate."</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <!-- end carousel -->

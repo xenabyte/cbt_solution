@@ -15,8 +15,8 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Examinations</a></li>
-                                <li class="breadcrumb-item active">Examination</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Assessments</a></li>
+                                <li class="breadcrumb-item active">Assessment</li>
                             </ol>
                         </div>
 
@@ -29,9 +29,9 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Examination</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Assessment</h4>
                             <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addExamination">Create Examination</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addExamination">Create Assessment</button>
                             </div>
                         </div><!-- end card header -->
 
@@ -44,13 +44,13 @@
                                         <div class="card-body">
                                             <h4 class="card-title mb-2">{{ $examination->code }} - {{ $examination->title }}</h4>
                                             <p class="card-text">{!! $examination->description !!}</p>
-                                            <p class="card-text"><strong>Examination Added By: </strong>{{ $examination->admin->name }}</p>
-                                            <p class="card-text"><strong>Examination Duration: </strong>{{ $examination->duration }}</p>
+                                            <p class="card-text"><strong>Assessment Added By: </strong>{{ $examination->admin->name }}</p>
+                                            <p class="card-text"><strong>Assessment Duration: </strong>{{ $examination->duration }}</p>
                                             <p class="card-text"><strong>Question Quantity: </strong>{{ $examination->question_number }}</p>
                                             <div class="text-start">
                                                 <a href="{{url('/admin/examination/'.$examination->slug)}}" class="btn btn-info">View</a>
-                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editExamination{{$examination->id}}" style="margin: 5px" class="btn btn-primary">Edit Examination</a>
-                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteExamination{{$examination->id}}" style="margin: 5px" class="btn btn-danger">Delete Examination</a>
+                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editExamination{{$examination->id}}" style="margin: 5px" class="btn btn-primary">Edit Assessment</a>
+                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteExamination{{$examination->id}}" style="margin: 5px" class="btn btn-danger">Delete Assessment</a>
                                             </div>
                                         </div>
                                     </div><!-- end card -->
@@ -58,7 +58,7 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content border-0 overflow-hidden">
                                                 <div class="modal-header p-3">
-                                                    <h4 class="card-title mb-0">Update Examination</h4>
+                                                    <h4 class="card-title mb-0">Update Assessment</h4>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
 
@@ -68,7 +68,7 @@
                                                         <input type="hidden" name='examination_id' value="{{ $examination->id }}">
                                                         
                                                         <div class="mb-3">
-                                                            <label for="title" class="form-label">Examination Title</label>
+                                                            <label for="title" class="form-label">Assessment Title</label>
                                                             <input type="text" class="form-control" name="title" id="title" value="{{ $examination->title }}">
                                                         </div>
 
@@ -78,17 +78,17 @@
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="code" class="form-label">Examination Code</label>
+                                                            <label for="code" class="form-label">Assessment Code</label>
                                                             <input type="text" class="form-control" name="code" id="code" value="{{ $examination->code }}">
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="question" class="form-label">Examination Question Quantity</label>
+                                                            <label for="question" class="form-label">Assessment Question Quantity</label>
                                                             <input type="number" class="form-control" name="question_number" id="question" value="{{ $examination->question_number }}">
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="duration" class="form-label">Examination Duration (In Minutes)</label>
+                                                            <label for="duration" class="form-label">Assessment Duration (In Minutes)</label>
                                                             <input type="number" class="form-control" name="duration" id="duration" value="{{ $examination->duration }}">
                                                         </div>
 
@@ -146,7 +146,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 overflow-hidden">
                         <div class="modal-header p-3">
-                            <h4 class="card-title mb-0">Create Examination</h4>
+                            <h4 class="card-title mb-0">Create Assessment</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -154,7 +154,7 @@
                             <form action="{{ url('/admin/addExamination') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Examination Title</label>
+                                    <label for="title" class="form-label">Assessment Title</label>
                                     <input type="text" class="form-control" name="title" id="title" autofocus>
                                 </div>
 
@@ -164,17 +164,17 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="code" class="form-label">Examination Code</label>
+                                    <label for="code" class="form-label">Assessment Code</label>
                                     <input type="text" class="form-control" name="code" id="code">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="question" class="form-label">Examination Question Quantity</label>
+                                    <label for="question" class="form-label">Assessment Question Quantity</label>
                                     <input type="number" class="form-control" name="question_number" id="question">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="duration" class="form-label">Examination Duration (In Minutes)</label>
+                                    <label for="duration" class="form-label">Assessment Duration (In Minutes)</label>
                                     <input type="number" class="form-control" name="duration" id="duration">
                                 </div>
 
@@ -185,7 +185,7 @@
                                 
                                 <hr>
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-primary">Create Examination</button>
+                                    <button type="submit" class="btn btn-primary">Create Assessment</button>
                                 </div>
                             </form>
                         </div>

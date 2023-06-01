@@ -34,9 +34,9 @@
                         <div class="col-xl-7">
                             <div class="card card-height-100">
                                 <div class="card-header border-0 align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Examination Overview - {{ $examination->title }}</h4>
+                                    <h4 class="card-title mb-0 flex-grow-1">Assessment Overview - {{ $examination->title }}</h4>
                                     <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editExamination">Update Examination</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editExamination">Update Assessment</button>
                                     </div>
                                 </div><!-- end card header -->
 
@@ -77,7 +77,7 @@
                         <div class="col-xl-5">
                             <div class="card card-height-100">
                                 <div class="card-header border-0 align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Examination Information
+                                    <h4 class="card-title mb-0 flex-grow-1">Assessment Information
                                         @if($examination->status == 'Active') 
                                             <button type="button" class="btn btn-primary position-relative">{{ $examination->status }}</button>
                                         @endif
@@ -100,7 +100,7 @@
                                    <hr>
 
                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
-                                        Total Examination Questions
+                                        Total Assessment Questions
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="mb-1"></h6>
                                         </div>
@@ -120,7 +120,7 @@
                                     </div>
 
                                     <div class="mini-stats-wid d-flex align-items-center mt-3">
-                                       Examination Duration
+                                       Assessment Duration
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="mb-1"></h6>
                                         </div>
@@ -140,7 +140,7 @@
                                     </div><!-- end -->
 
                                     <div class="mini-stats-wid d-flex align-items-center mt-3">
-                                        Examination  Start Time
+                                        Assessment  Start Time
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="mb-1"></h6>
                                         </div>
@@ -171,7 +171,7 @@
                 <div class="col-xxl-12 col-lg-12">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Examination Candidates</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Assessment Candidates</h4>
                             <div class="flex-shrink-0">
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bulkUpload">Bulk Upload Candidate</button>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSingleCandidate">Add Candidate</button>
@@ -298,7 +298,7 @@
                 <div class="col-xxl-12 col-lg-12">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Examination Questions</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Assessment Questions</h4>
                             <div class="flex-shrink-0">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadBulkQuestion">Upload Question</button>
                             </div>
@@ -319,7 +319,7 @@
                                         @foreach($examination->questions as $question)
                                         <tr>
                                             <th scope="row">{{ $loop->iteration }}</th>
-                                            <td>{{ $question->text }}</td>
+                                            <td>{!! $question->text !!}</td>
                                             <td>
                                                 <ul>
                                                     @foreach ($question->options as $option)
@@ -440,7 +440,7 @@
 
                                                                         <div class="mb-3">
                                                                             <label for="question" class="form-label">Question</label>
-                                                                            <input type="text" class="form-control" name="text" id="question" value="{{ $question->text }}">
+                                                                            <textarea class="form-control" name="text" id="question">{{ $question->text }}</textarea>
                                                                         </div>
                                         
                                                                         <hr>
@@ -528,7 +528,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 overflow-hidden">
                         <div class="modal-header p-3">
-                            <h4 class="card-title mb-0">Upload Examination Question</h4>
+                            <h4 class="card-title mb-0">Upload Assessment Question</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -624,7 +624,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 overflow-hidden">
                         <div class="modal-header p-3">
-                            <h4 class="card-title mb-0">Update Examination</h4>
+                            <h4 class="card-title mb-0">Update Assessment</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -634,7 +634,7 @@
                                 <input type="hidden" name='examination_id' value="{{ $examination->id }}">
                                 
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Examination Title</label>
+                                    <label for="title" class="form-label">Assessment Title</label>
                                     <input type="text" class="form-control" name="title" id="title" value="{{ $examination->title }}">
                                 </div>
 
@@ -644,17 +644,17 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="code" class="form-label">Examination Code</label>
+                                    <label for="code" class="form-label">Assessment Code</label>
                                     <input type="text" class="form-control" name="code" id="code" value="{{ $examination->code }}">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="question" class="form-label">Examination Question Quantity</label>
+                                    <label for="question" class="form-label">Assessment Question Quantity</label>
                                     <input type="number" class="form-control" name="question_number" id="question" value="{{ $examination->question_number }}">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="duration" class="form-label">Examination Duration (In Minutes)</label>
+                                    <label for="duration" class="form-label">Assessment Duration (In Minutes)</label>
                                     <input type="number" class="form-control" name="duration" id="duration" value="{{ $examination->duration }}">
                                 </div>
 

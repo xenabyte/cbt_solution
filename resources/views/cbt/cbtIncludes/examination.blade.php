@@ -43,7 +43,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12 mb-5">
                                                         <div class="mb-3">
-                                                            <h5>Question {{ $loop->iteration }}: {{ $candidateQuestion->question->text }}</h5>
+                                                            <h5>Question {{ $loop->iteration }}: {!! $candidateQuestion->question->text !!}</h5>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
