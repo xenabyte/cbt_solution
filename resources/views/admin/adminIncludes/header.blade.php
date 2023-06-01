@@ -171,10 +171,10 @@
                 </li> <!-- end Dashboard Menu -->
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#media" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                    <a class="nav-link menu-link" href="#student" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
                         <i class="mdi mdi-account-box-multiple"></i> <span data-key="t-forms">Students</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="media">
+                    <div class="collapse menu-dropdown" id="student">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{ url('admin/students') }}"
