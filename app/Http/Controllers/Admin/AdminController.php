@@ -23,6 +23,8 @@ use App\Models\Candidate;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\Student;
+use App\Models\Media;
+
 
 class AdminController extends Controller
 {
