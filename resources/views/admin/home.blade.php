@@ -202,7 +202,7 @@
                                 <h4 class="card-title mb-2">{{ $examination->code }} - {{ $examination->title }}</h4>
                                 <p class="card-text">{!! $examination->description !!}</p>
                                 <p class="card-text"><strong>Assessment Added By: </strong>{{ $examination->admin->name }}</p>
-                                <p class="card-text"><strong>Assessment Duration: </strong>{{ $examination->duration }}</p>
+                                <p class="card-text"><strong>Assessment Duration: </strong>{{ $examination->duration }} Minutes</p>
                                 <p class="card-text"><strong>Question Quantity: </strong>{{ $examination->question_number }}</p>
                                 <div class="text-start">
                                     <a href="{{url('/admin/examination/'.$examination->slug)}}" class="btn btn-info">View</a>

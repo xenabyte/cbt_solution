@@ -135,27 +135,7 @@
                                             <h6 class="mb-1"></h6>
                                         </div>
                                         <div class="form-check form-switch">
-                                            {{ $examination->candidates->count() }} Candidates
-                                        </div>
-                                    </div><!-- end -->
-
-                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
-                                        Assessment  Start Time
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-1"></h6>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            {{ $examination->candidates->count() }} Candidates
-                                        </div>
-                                    </div><!-- end -->
-
-                                    <div class="mini-stats-wid d-flex align-items-center mt-3">
-                                        Timer
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-1"></h6>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            {{ $examination->candidates->count() }} Candidates
+                                            {{ $examination->candidates->count() }} candidates
                                         </div>
                                     </div><!-- end -->
                                     
