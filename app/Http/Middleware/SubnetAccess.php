@@ -14,9 +14,7 @@ class SubnetAccess
         $clientIp = $request->ip();
         $subnet = $this->getSubnet($clientIp);
 
-        Log::info($subnet);
-
-        $subnet = '127.0.0.0/24'; // Change this to your desired subnet
+        $subnet = env('APP_SUBNET'); // Change this to your desired subnet
 
         if (!$this->isIpInSubnet($clientIp, $subnet)) {
             abort(403, 'Unauthorized');
