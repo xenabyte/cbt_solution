@@ -44,8 +44,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Id</th>
-                                                <th scope="col">Firstname</th>
-                                                <th scope="col">Lastname</th>
+                                                <th scope="col">Name</th>
                                                 <th scope="col">Email</th>
                                                 <th scope="col">Role</th>
                                                 <th scope="col"></th>
@@ -55,8 +54,7 @@
                                             @foreach($admins as $admin)
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
-                                                <td>{{ $admin->firstname }} </td>
-                                                <td>{{ $admin->lastname }} </td>
+                                                <td>{{ $admin->name }} </td>
                                                 <td>{{ $admin->email }}</td>
                                                 <td>{{ $admin->role? 'Regular' : 'Administrator' }}</td>
                                                 <td>
@@ -74,7 +72,7 @@
                                                                         <div class="mt-2">
                                                                             <lord-icon src="https://cdn.lordicon.com/wwneckwc.json" trigger="hover" style="width:150px;height:150px">
                                                                             </lord-icon>
-                                                                            <h4 class="mb-3 mt-4">Are you sure you want to delete <br/> {{ $admin->firstname .' '. $admin->lastname }}?</h4>
+                                                                            <h4 class="mb-3 mt-4">Are you sure you want to delete <br/> {{ $admin->name .' '. $admin->lastname }}?</h4>
                                                                             <form action="{{ url('/admin/deleteAdmin') }}" method="POST">
                                                                                 @csrf
                                                                                 <input name="admin_id" type="hidden" value="{{$admin->id}}">
@@ -106,14 +104,10 @@
                                                                             <input name="admin_id" type="hidden" value="{{$admin->id}}">
                                             
                                                                             <div class="mb-3">
-                                                                                <label for="firstname" class="form-label">Firstname</label>
-                                                                                <input type="text" class="form-control" name="firstname" id="firstname" value="{{ $admin->firstname }}">
+                                                                                <label for="name" class="form-label">Name</label>
+                                                                                <input type="text" class="form-control" name="name" id="name" value="{{ $admin->name }}">
                                                                             </div>
                                             
-                                                                            <div class="mb-3">
-                                                                                <label for="lastname" class="form-label">Lastname</label>
-                                                                                <input type="text" class="form-control" name="lastname" id="lastname" value="{{ $admin->lastname }}">
-                                                                            </div>
 
                                                                             <div class="mb-3">
                                                                                 <label for="email" class="form-label">Email</label>
@@ -167,13 +161,8 @@
                                 @csrf
 
                                 <div class="mb-3">
-                                    <label for="firstname" class="form-label">Firstname</label>
-                                    <input type="text" class="form-control" name="firstname" id="firstname">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="lastname" class="form-label">Lastname</label>
-                                    <input type="text" class="form-control" name="lastname" id="lastname">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="name">
                                 </div>
 
                                 <div class="mb-3">

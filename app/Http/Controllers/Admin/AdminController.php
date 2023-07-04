@@ -902,8 +902,7 @@ class AdminController extends Controller
 
     public function addAdmin(Request $request){
         $validator = Validator::make($request->all(), [
-            'firstname' => 'required|min:1',
-            'lastname' => 'required',
+            'name' => 'required|min:1',
             'email' => 'required',
             'password' => 'required',
         ]);
@@ -916,8 +915,7 @@ class AdminController extends Controller
         $password = $request->password;
 
         $newAdmin = ([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($password),
         ]);
@@ -948,12 +946,8 @@ class AdminController extends Controller
         }
 
 
-        if(!empty($request->firstname) &&  $request->firstname != $admin->firstname){
-            $admin->firstname = $request->firstname;
-        }
-
-        if(!empty($request->lastname) &&  $request->lastname != $admin->lastname){
-            $admin->lastname = $request->lastname;
+        if(!empty($request->name) &&  $request->name != $admin->name){
+            $admin->name = $request->name;
         }
 
         if(!empty($request->email) &&  $request->email != $admin->email){
