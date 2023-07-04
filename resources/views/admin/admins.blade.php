@@ -118,6 +118,15 @@
                                                                                 <label for="password" class="form-label">Password</label>
                                                                                 <input type="text" class="form-control" name="password" id="password">
                                                                             </div>
+
+                                                                            <div class="mb-3">
+                                                                                <label for="role" class="form-label">Select Status</label>
+                                                                                <select class="form-select" aria-label="role" name="role">
+                                                                                    <option value= "{{ $admin->role }}">{{ empty($admin->role)? 'Administrator' : 'Regular' }} </option>
+                                                                                    <option value="">Administrator</option>
+                                                                                    <option value="Regular">Regular</option>
+                                                                                </select>
+                                                                            </div>
                                             
                                                                             <hr>
                                                                             <div class="text-end">
@@ -168,6 +177,15 @@
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="text" class="form-control" name="email" id="email">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Select Status</label>
+                                    <select class="form-select" aria-label="role" name="role">
+                                        <option value= "">Select Status </option>
+                                        <option value="">Administrator</option>
+                                        <option value="Regular">Regular</option>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">

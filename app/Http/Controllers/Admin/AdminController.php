@@ -918,6 +918,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($password),
+            'role' => $request->role
         ]);
 
         if(Admin::create($newAdmin)){
@@ -952,6 +953,10 @@ class AdminController extends Controller
 
         if(!empty($request->email) &&  $request->email != $admin->email){
             $admin->email = $request->email;
+        }
+
+        if(!empty($request->role) &&  $request->role != $admin->role){
+            $admin->role = $request->role;
         }
 
         if(!empty($request->password) &&  $request->password != $admin->password){
