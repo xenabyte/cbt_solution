@@ -174,7 +174,7 @@
                 @if(empty(Auth::guard('admin')->user()->role))
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#admin" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
-                        <i class="mdi mdi-account-box-multiple"></i> <span data-key="t-forms">Students</span>
+                        <i class="mdi mdi-account-box-multiple"></i> <span data-key="t-forms">Admins</span>
                     </a>
                     <div class="collapse menu-dropdown" id="admin">
                         <ul class="nav nav-sm flex-column">
