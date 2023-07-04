@@ -30,7 +30,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Students</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Administrator</h4>
                             <div class="flex-shrink-0">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAdmin">Add Admin</button>
                             </div>
