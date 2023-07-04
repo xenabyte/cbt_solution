@@ -42,8 +42,12 @@ class AdminController extends Controller
     }
 
     public function index(){
-
-        $examinations = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->get();
+        $admin = Auth::guard('admin')->user();
+        $examinations = Examination::with('admin', 'questions', 'candidates', 'candidates.student' )->where('admin_id', $admin->id)->orderBy('id', 'DESC')->get();
+        
+        if(empty($admin->role)){
+            $examinations = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->orderBy('id', 'DESC')->get();
+        }
         $students = Student::all();
 
         return view('admin.home', [
