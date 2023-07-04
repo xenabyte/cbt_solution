@@ -92,9 +92,11 @@
                                         @endif
                                     </h4>
 
+                                    @if(empty(Auth::guard('admin')->user()->role))
                                     <div class="flex-shrink-0">
                                         <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#examStatus">Update Exam Status</button>
                                     </div>
+                                    @endif
                                 </div><!-- end cardheader -->
                                 <div class="card-body pt-0">
                                    <hr>

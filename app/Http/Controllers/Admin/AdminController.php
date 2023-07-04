@@ -53,8 +53,12 @@ class AdminController extends Controller
     }
 
     public function examinations(){
-        
-        $examinations = Examination::with('admin', 'questions', 'candidates')->orderBy('id', 'DESC')->get();
+        $admin = Auth::guard('admin')->user();
+        $examinations = Examination::with('admin', 'questions', 'candidates')->where('admin_id', $admin->id)->orderBy('id', 'DESC')->get();
+
+        if(empty($admin->role)){
+            $examinations = Examination::with('admin', 'questions', 'candidates')->orderBy('id', 'DESC')->get();
+        }
 
         return view('admin.examination', [
             'examinations' => $examinations
@@ -183,7 +187,6 @@ class AdminController extends Controller
     }
 
     public function getExamination($slug){
-        
         $examination = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->where('slug', $slug)->first();
 
         return view('admin.singleExamination', [
@@ -883,6 +886,113 @@ class AdminController extends Controller
             return redirect()->back();
         }
 
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function admins(){
+        
+        $admins = Admin::get();
+
+        return view('admin.admins', [
+            'admins' => $admins
+        ]);
+    }
+
+    public function addAdmin(Request $request){
+        $validator = Validator::make($request->all(), [
+            'firstname' => 'required|min:1',
+            'lastname' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+        
+        $password = $request->password;
+
+        $newAdmin = ([
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'email' => $request->email,
+            'password' => bcrypt($password),
+        ]);
+
+        if(Admin::create($newAdmin)){
+            alert()->success('Admin Added successfully', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+        
+    }
+
+    public function updateAdmin(Request $request){
+        $validator = Validator::make($request->all(), [
+            'admin_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$admin = Admin::find($request->admin_id)){
+            alert()->error('Oops', 'Invalid Admin')->persistent('Close');
+            return redirect()->back();
+        }
+
+
+        if(!empty($request->firstname) &&  $request->firstname != $admin->firstname){
+            $admin->firstname = $request->firstname;
+        }
+
+        if(!empty($request->lastname) &&  $request->lastname != $admin->lastname){
+            $admin->lastname = $request->lastname;
+        }
+
+        if(!empty($request->email) &&  $request->email != $admin->email){
+            $admin->email = $request->email;
+        }
+
+        if(!empty($request->password) &&  $request->password != $admin->password){
+            $admin->password = bcrypt($request->password);
+        }
+
+        if($admin->save()){
+            alert()->success('Changes Saved', 'Admin changes saved successfully')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function deleteAdmin(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'admin_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$admin = Admin::find($request->admin_id)){
+            alert()->error('Oops', 'Invalid Admin')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($admin->delete()){
+            alert()->success('Record Deleted', '')->persistent('Close');
+            return redirect()->back();
+        }
 
         alert()->error('Oops!', 'Something went wrong')->persistent('Close');
         return redirect()->back();
