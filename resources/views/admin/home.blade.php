@@ -6,7 +6,7 @@
 <div class="main-content">
 
     <div class="page-content">
-        < class="container-fluid">
+        <div class="container-fluid">
 
             <!-- start page title -->
             <div class="row">
@@ -93,7 +93,6 @@
                                     <th scope="col">Id</th>
                                     <th scope="col">Firstname</th>
                                     <th scope="col">Lastname</th>
-                                    <th scope="col">Email</th>
                                     <th scope="col">Matric Number</th>
                                     <th scope="col">Registration Number</th>
                                     <th scope="col"></th>
@@ -105,7 +104,6 @@
                                     <th scope="row">{{ $loop->iteration }}</th>
                                     <td>{{ $student->firstname }} </td>
                                     <td>{{ $student->lastname }} </td>
-                                    <td>{{ $student->email }}</td>
                                     <td>{{ $student->matric_number }} </td>
                                     <td>{{ $student->reg_number }} </td>
                                     <td>
