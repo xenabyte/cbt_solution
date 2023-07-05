@@ -33,29 +33,23 @@
                                         <h5 class="fs-14 text-end">Your Active Assessments</h5>
                                         <hr>
                                         <div class="ribbon-content mt-5 text-muted">
-                                            @if($candidates->count() > 0)
+                                        @if($candidates->count() > 0)
                                             <div class="table-responsive">
                                                 <table class="table table-nowrap align-middle justify-content-center mb-0">
                                                     <tbody>
-        
                                                         <tr>
                                                             @foreach($candidates as $candidate)
+                                                                <td>
+                                                                    {{ ucwords($candidate->examination->title) }} ({{ $candidate->examination->code }})
+                                                                </td>
                                                                 @if($candidate->examination->status == 'Active')
-                                                                    <td>
-                                                                        {{ ucwords($candidate->examination->title) }} ({{ $candidate->examination->code }})
-                                                                    </td>
                                                                     <td class="text-end">
                                                                         <a href="{{ url('cbt/takeExam/'.$candidate->examination->slug)  }}" class="btn btn-primary btn-sm">Take Assessment</a>
                                                                     </td>
                                                                 @else
-                                                                    <div class="card-body text-center">
-                                                                        <div class="avatar-sm mx-auto mb-3">
-                                                                            <div class="avatar-title bg-soft-danger text-danger fs-17 rounded">
-                                                                                <i class=" ri-close-circle-line"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                        <h4 class="card-title">No active assessment</h4>
-                                                                    </div>
+                                                                    <td class="text-end">
+                                                                        <a href="" class="btn btn-primary btn-sm">Assessment is not active, contact adminstrator</a>
+                                                                    </td>
                                                                 @endif
                                                             @endforeach
                                                         </tr>

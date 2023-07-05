@@ -680,6 +680,8 @@ class AdminController extends Controller
         $isCorrect = $request->is_correct == 'on' ? true : false;
         if($isCorrect != $option->is_correct){
             $option->is_correct = $isCorrect;
+
+            Options::where('question_id', $option->question_id)->update(['is_correct' => 0]);
         }
 
         if($option->save()){
