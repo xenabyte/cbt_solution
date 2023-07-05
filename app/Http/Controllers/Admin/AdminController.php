@@ -345,8 +345,8 @@ class AdminController extends Controller
                         'firstname' => $row['firstname'],
                         'lastname' => $row['lastname'],
                         'email' => $row['email'],
-                        'matric_number' => $row['matric_number'],
-                        'reg_number' => $row['reg_number'],
+                        'matric_number' => !empty($row['matric_number']) ?  $row['matric_number'] : null,
+                        'reg_number' => !empty($row['reg_number']) ?  $row['reg_number'] : null,
                         'password' => bcrypt($password),
                         'view_password' => $password,
                     ]);
