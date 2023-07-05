@@ -166,7 +166,6 @@
                                         <th scope="col">Id</th>
                                         <th scope="col">Firstname</th>
                                         <th scope="col">Lastname</th>
-                                        <th scope="col">Email</th>
                                         <th scope="col">Matric Number</th>
                                         <th scope="col">Registration Number</th>
                                         <th scope="col">Result</th>
@@ -179,7 +178,6 @@
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $candidate->student->firstname }} </td>
                                         <td>{{ $candidate->student->lastname }} </td>
-                                        <td>{{ $candidate->student->email }}</td>
                                         <td>{{ $candidate->student->matric_number }} </td>
                                         <td>{{ $candidate->student->reg_number }} </td>
                                         <td>{{ $candidate->result }} </td>
