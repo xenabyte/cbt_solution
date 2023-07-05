@@ -84,6 +84,7 @@
 
             <hr>
             <div class="row project-wrapper">
+                @if(empty(Auth::guard('admin')->user()->role))
                 <div class="col-xxl-12">
                     <div class="card card-body">
                         <table id="fixed-header" class="table table-borderedless dt-responsive nowrap table-striped align-middle" style="width:100%">
@@ -192,11 +193,12 @@
                         </table>
                     </div>
                 </div><!-- end col -->
+                @endif
 
                 <div class="col-xxl-12">
                     <div class="card card-body">
                         @foreach($examinations as $examination)
-                        <div class="col-sm-6 col-xl-3">
+                        <div class="col-sm-6">
                             <!-- Simple card -->
                             <div class="card card-body">
                                 <h4 class="card-title mb-2">{{ $examination->code }} - {{ $examination->title }}</h4>
@@ -288,7 +290,7 @@
                                 </div><!-- /.modal-dialog -->
                             </div><!-- /.modal -->
                         </div><!-- end col -->
-                    @endforeach
+                        @endforeach
                     </div>
                 </div>
             </div><!-- end row -->
