@@ -187,7 +187,6 @@
 
                     </div>
                 </li>
-                @endif
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#student" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
@@ -204,6 +203,8 @@
 
                     </div>
                 </li>
+
+                @endif
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#siteSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
