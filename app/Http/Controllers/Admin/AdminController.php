@@ -677,9 +677,9 @@ class AdminController extends Controller
         if(!empty($request->option_text) && $request->option_text != $option->option_text){
             $option->option_text = $request->option_text;
         }
-
-        if($request->is_correct != $option->is_correct){
-            $option->is_correct = $request->is_correct;
+        $isCorrect = $request->is_correct == 'on' ? true : false;
+        if($isCorrect != $option->is_correct){
+            $option->is_correct = $isCorrect;
         }
 
         if($option->save()){
