@@ -311,6 +311,57 @@
                 <!-- end col -->
             </div>
             <!-- end row -->
+
+            <div id="addExamination" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 overflow-hidden">
+                        <div class="modal-header p-3">
+                            <h4 class="card-title mb-0">Create Assessment</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="{{ url('/admin/addExamination') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Assessment Title</label>
+                                    <input type="text" class="form-control" name="title" id="title" autofocus>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" id="description"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="code" class="form-label">Assessment Code</label>
+                                    <input type="text" class="form-control" name="code" id="code">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="question" class="form-label">Assessment Question Quantity</label>
+                                    <input type="number" class="form-control" name="question_number" id="question">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="duration" class="form-label">Assessment Duration (In Minutes)</label>
+                                    <input type="number" class="form-control" name="duration" id="duration">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="mark" class="form-label">Mark per question</label>
+                                    <input type="number" class="form-control" name="mark" id="mark">
+                                </div>
+                                
+                                <hr>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">Create Assessment</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
               
 
 @include('admin.adminIncludes.footer')
