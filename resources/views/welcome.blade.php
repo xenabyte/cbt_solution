@@ -80,7 +80,7 @@
                                             </div>
                                         @endif
                                         <div class="mb-2 mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Continue</button>
+                                            <button id="submit-button" class="btn btn-success w-100" type="submit">Continue</button>
                                         </div>
                                     </form><!-- end form -->
 
@@ -123,11 +123,29 @@
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
     <script src="{{ asset('assets/js/plugins.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
 
     <!-- particles js -->
     <script src="{{ asset('assets/libs/particles.js/particles.js') }}"></script>
     <!-- particles app js -->
     <script src="{{asset('assets/js/pages/particles.app.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+          $("#submit-button").click(function() {
+            // Disable the button
+            $(this.form).submit();
+
+            $(this).prop("disabled", true);
+        
+            // Remove the text
+            $(this).text("");
+        
+            // Replace the text with a spinner
+            $(this).html("<i class='fa fa-spinner fa-spin'></i>");
+          });
+        });
+    </script>
 </body>
 
 </html>
