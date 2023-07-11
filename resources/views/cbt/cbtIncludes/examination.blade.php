@@ -30,7 +30,7 @@
                                         <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
                                             @foreach($candidateQuestions as $candidateQuestion)
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link @if($loop->iteration == 1) active @endif" id="question{{$candidateQuestion->id}}" data-bs-toggle="pill" data-bs-target="#question{{$loop->iteration}}-tab" type="button" role="tab" aria-controls="question{{$candidateQuestion->id}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
+                                                <button class="nav-link @if($loop->iteration == 1) active @endif" id="question{{$loop->iteration}}" data-bs-toggle="pill" data-bs-target="#question{{$loop->iteration}}-tab" type="button" role="tab" aria-controls="question{{$loop->iteration}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
                                             </li>
                                             @endforeach
                                         </ul>
@@ -38,7 +38,7 @@
 
                                     <div class="tab-content mt-5">
                                         @foreach($candidateQuestions as $candidateQuestion)
-                                        <div class="tab-pane fade @if($loop->iteration == 1) show active @endif" id="question{{$loop->iteration}}-tab" role="tabpanel" aria-labelledby="question1">
+                                        <div class="tab-pane fade @if($loop->iteration == 1) show active @endif" id="question{{$loop->iteration}}-tab" role="tabpanel" aria-labelledby="question{{$loop->iteration}}">
                                             <div>
                                                 <div class="row">
                                                     <div class="col-lg-12 mb-5">
@@ -50,8 +50,8 @@
                                                         @foreach($candidateQuestion->question->options as $option)
                                                         <!-- Base Radios -->
                                                         <div class="form-check mb-2">
-                                                            <input class="form-check-input" type="radio" name="option{{ $candidateQuestion->question->id }}" id="option" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="option">
+                                                            <input class="form-check-input" type="radio" name="option{{ $candidateQuestion->question->id }}" id="option{{ $candidateQuestion->question->id }}" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="option{{ $candidateQuestion->question->id }}">
                                                                 {{ $option->option_text }}
                                                             </label>
                                                         </div>
