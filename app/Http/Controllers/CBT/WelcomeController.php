@@ -27,7 +27,7 @@ use App\Models\Student;
 class WelcomeController extends Controller
 {
     //
-    public function index(){
+    public function welcome(){
 
         Auth::guard('student')->logout();
         return view('welcome');
