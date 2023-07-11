@@ -50,7 +50,7 @@
                                                         @foreach($candidateQuestion->question->options as $option)
                                                         <!-- Base Radios -->
                                                         <div class="form-check mb-2">
-                                                            <input class="form-check-input" type="radio" name="option{{ $option->id }}" id="option{{ $candidateQuestion->question->id }}" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="radio" name="option{{ $candidateQuestion->question->id }}" id="option{{ $option->id }}" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="option{{ $option->id }}">
                                                                 {{ $option->option_text }}
                                                             </label>
