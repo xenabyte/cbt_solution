@@ -30,7 +30,7 @@
                                         <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
                                             @foreach($candidateQuestions as $candidateQuestion)
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link @if($loop->iteration == 1) active @endif" id="question{{$candidateQuestion->id}}" data-bs-toggle="pill" data-bs-target="#question{{$candidateQuestion->id}}-tab" type="button" role="tab" aria-controls="question{{$candidateQuestion->id}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
+                                                <button class="nav-link @if($loop->iteration == 1) active @endif" id="question{{$candidateQuestion->id}}" data-bs-toggle="pill" data-bs-target="#question{{$loop->iteration}}-tab" type="button" role="tab" aria-controls="question{{$candidateQuestion->id}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
                                             </li>
                                             @endforeach
                                         </ul>
