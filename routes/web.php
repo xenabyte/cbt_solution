@@ -97,3 +97,5 @@ Route::group(['prefix' => 'cbt'], function () {
   Route::post('/submitExam', [App\Http\Controllers\CBT\HomeController::class, 'submitExam'])->name('submitExam');
 
 });
+
+Route::get('/', [App\Http\Controllers\CBT\HomeController::class, 'welcome']);
