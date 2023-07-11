@@ -98,4 +98,4 @@ Route::group(['prefix' => 'cbt'], function () {
 
 });
 
-Route::get('/', [App\Http\Controllers\CBT\HomeController::class, 'welcome']);
+Route::get('/', [App\Http\Controllers\CBT\WelcomeController::class, 'welcome']);
