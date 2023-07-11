@@ -123,7 +123,6 @@
                             <h5 class="fs-14 mb-2">Assessment Timer</h5>
                             <br>
                             <h5 id="demo"></h5>
-
                         </div>
                     </div>
                 </div>

@@ -54,7 +54,7 @@
                                             <input type="hidden" name="examination_id" value="{{$examination->id}}" />
                                             <input type="hidden" name="candidate_id" value="{{$candidate->id}}" />
 
-                                            <button type="submit" class="btn btn-success">Start Exam</button>
+                                            <button type="submit" id="submitButton" class="btn btn-success">Start Exam</button>
                                         </form>
                                      </div><!-- end cardbody -->
                                 </div>
@@ -70,3 +70,17 @@
     <!-- container-fluid -->
 </div>
 <!-- End Page-content -->
+
+<script>
+    $(document).ready(function() {
+        // Get the button
+        var button = $("#submitButton");
+
+        // Disable the button after a single click
+        button.click(function() {
+            button.prop("disabled", true);
+            button.text("");
+            button.append("<i class='fa fa-spinner fa-spin'></i>");
+        });
+    });
+</script>
