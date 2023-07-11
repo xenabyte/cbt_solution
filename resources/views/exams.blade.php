@@ -48,7 +48,7 @@
                                                                     </td>
                                                                 @else
                                                                     <td class="text-end">
-                                                                        <a href="" class="btn btn-primary btn-sm">Assessment is not active, contact adminstrator</a>
+                                                                        <a style="display:block; margin-top: 10px" class="btn btn-primary btn-sm">Assessment is not active, contact adminstrator</a> <br/>
                                                                     </td>
                                                                 @endif
                                                             @endforeach
