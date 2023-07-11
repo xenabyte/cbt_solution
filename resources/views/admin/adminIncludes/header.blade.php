@@ -12,15 +12,16 @@
     <meta name="robots" content="noindex">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{asset('assets/fonts/font-awesome.min.css')}}">
 
     <!--datatable css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="{{asset('assets/css/dataTables.bootstrap5.min.css')}}" />
     <!--datatable responsive css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+    <link rel="stylesheet" href="{{asset('assets/css/responsive.bootstrap.min.css')}}" />
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="{{asset('assets/css/buttons.dataTables.min.css')}}">
+
+
 
     <!-- Layout config Js -->
     <script src="{{asset('assets/js/layout.js')}}"></script>
@@ -33,7 +34,7 @@
     <!-- custom Css-->
     <link href="{{asset('assets/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
 
-    <script src="https://cdn.tiny.cloud/1/b9d45cy4rlld8ypwkzb6yfzdza63fznxtcoc3iyit61r4rv9/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="{{asset('assets/js/tinymce.min.js')}}" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
             selector: 'textarea',
