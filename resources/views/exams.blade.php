@@ -37,23 +37,19 @@
                                             <div class="table-responsive">
                                                 <table class="table table-nowrap align-middle justify-content-center mb-0">
                                                     <tbody>
-
-                                                            @foreach($candidates as $candidate)
-                                                               <tr>
-                                                                    <td>
-                                                                        {{ ucwords($candidate->examination->title) }} ({{ $candidate->examination->code }})
-                                                                    </td>
-                                                                    @if($candidate->examination->status == 'Active')
-                                                                        <td class="text-end">
-                                                                            <a href="{{ url('cbt/takeExam/'.$candidate->examination->slug)  }}" class="btn btn-primary btn-sm">Take Assessment</a>
-                                                                        </td>
-                                                                    @else
-                                                                        <td class="text-end">
-                                                                            <a class="btn btn-primary btn-sm">Assessment is not active, contact adminstrator</a> <br/>
-                                                                        </td>
-                                                                    @endif
-                                                                </tr>
-                                                            @endforeach
+                                                        @foreach($candidates as $candidate)
+                                                            <tr>
+                                                            @if($candidate->examination->status != 'Inactive')
+                                                                <td>
+                                                                    {{ ucwords($candidate->examination->title) }} ({{ $candidate->examination->code }})
+                                                                </td>
+                                                            
+                                                                <td class="text-end">
+                                                                    <a href="{{ url('cbt/takeExam/'.$candidate->examination->slug)  }}" class="btn btn-primary btn-sm">Take Assessment</a>
+                                                                </td>
+                                                                @endif
+                                                            </tr>
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
