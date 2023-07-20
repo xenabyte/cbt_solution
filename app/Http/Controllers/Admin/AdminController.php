@@ -541,7 +541,7 @@ class AdminController extends Controller
                         $isCorrectOptionSet = false;
     
                         foreach ($row as $key => $value) {
-                            if (strpos($key, 'option_') == 0 && !empty($value)) {
+                            if (strpos($key, 'option_') === 0 && !empty($value)) {
                                 $optionData = [
                                     'option_text' => $value,
                                     'is_correct' => ($value == $row['answer']) ? 1 : 0,
@@ -555,10 +555,10 @@ class AdminController extends Controller
                             }
                         }
             
-                        // if ($isCorrectOptionSet) {
+                        if ($isCorrectOptionSet) {
                             $question = Question::create($questionData);
                             $question->options()->createMany($optionsData);
-                        // }
+                        }
                     }
                 }
     
