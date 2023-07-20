@@ -711,9 +711,11 @@ class AdminController extends Controller
             return redirect()->back();
         }
 
+        $isCorrect = $request->is_correct == 'on' ? true : false;
+
         $addOption = ([
             'question_id' => $request->question_id,
-            'is_correct' => $request->is_correct,
+            'is_correct' => $isCorrect,
             'option_text' => $request->option_text
         ]);
 
@@ -886,7 +888,7 @@ class AdminController extends Controller
 
         if($media->delete()){ 
             if(!empty($media->file)){
-                //unlink($slider->image);
+                unlink($slider->image);
             }
             alert()->success('Record Deleted', '')->persistent('Close');
             return redirect()->back();
