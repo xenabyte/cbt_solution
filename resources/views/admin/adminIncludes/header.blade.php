@@ -11,16 +11,16 @@
     <meta content="Oladipo Damilare(KoderiaNG)" name="author" />
     <meta name="robots" content="noindex">
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}">
+    <link rel="shortcut icon" href="{{asset('images/favicon.png')}}">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{asset('assets/css/fontawesome.css')}}" rel="stylesheet" type="text/css" />
 
-    <!--datatable css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+     <!--datatable css-->
+    <link rel="stylesheet" href="{{asset('assets/datatables/1.11.5/css/dataTables.bootstrap5.min.css')}}" />
     <!--datatable responsive css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+    <link rel="stylesheet" href="{{asset('assets/datatables/responsive/2.2.9/css/responsive.bootstrap.min.css')}}" />
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="{{asset('assets/datatables/buttons/2.2.2/css/buttons.dataTables.min.css')}}">
 
     <!-- Layout config Js -->
     <script src="{{asset('assets/js/layout.js')}}"></script>
@@ -58,19 +58,19 @@
                 <div class="navbar-brand-box horizontal-logo">
                     <a href="{{ url('/admin/home') }}" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="{{asset('asset/images/logo.png')}}" alt="" height="22">
+                            <img src="{{asset('images/logo.png')}}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{asset('assets/images/logo-dark.png')}}" alt="" height="50">
+                            <img src="{{asset('images/logo-dark.png')}}" alt="" height="50">
                         </span>
                     </a>
 
                     <a href="{{ url('/admin/home') }}" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="{{asset('assets/images/logo.png')}}" alt="" height="22">
+                            <img src="{{asset('images/logo.png')}}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{asset('assets/images/logo.png')}}" alt="" height="80">
+                            <img src="{{asset('images/logo.png')}}" alt="" height="80">
                         </span>
                     </a>
                 </div>
@@ -135,19 +135,19 @@
         <!-- Dark Logo-->
         <a href="{{ url('/admin/home') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{asset('assets/images/logo.png')}}" alt="" height="22">
+                <img src="{{asset('images/logo.png')}}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{asset('assets/images/logo.png')}}" alt="" height="80">
+                <img src="{{asset('/images/logo.png')}}" alt="" height="80">
             </span>
         </a>
         <!-- Light Logo-->
         <a href="{{ url('/admin/home') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{asset('assets/images/logo.png')}}" alt="" height="22">
+                <img src="{{asset('images/logo.png')}}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{asset('assets/images/logo.png')}}" alt="" height="80">
+                <img src="{{asset('images/logo.png')}}" alt="" height="80">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">

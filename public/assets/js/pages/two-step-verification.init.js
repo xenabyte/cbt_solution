@@ -1,1 +1,1 @@
-function moveToNext(e,t){0<e.value.length&&document.getElementById("digit"+t+"-input").focus()}
+function getInputElement(e){return document.getElementById("digit"+e+"-input")}function moveToNext(e,t){t=t.which||t.keyCode;1===getInputElement(e).value.length&&(4!==e?getInputElement(e+1).focus():(getInputElement(e).blur(),console.log("submit code"))),8===t&&1!==e&&getInputElement(e-1).focus()}

@@ -62,7 +62,7 @@
                                             </div>
                                             <div class="d-flex align-items-start gap-3 mt-4">
                                                 @if($loop->iteration > 1)<button type="button" class="btn btn-light btn-label previestab" data-previous="question{{ $loop->iteration - 1 }}"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i> Previous</button>@endif
-                                                <button type="button" class="btn btn-primary btn-label right ms-auto nexttab nexttab" data-nexttab="question{{ $loop->iteration + 1 }}"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
+                                                <button type="button" class="btn btn-primary btn-label right ms-auto previestab" data-previous="question{{ $loop->iteration + 1 }}"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
                                             </div>
                                         </div>
                                         @endforeach

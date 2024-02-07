@@ -12,7 +12,7 @@
     <meta name="robots" content="noindex">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{asset('assets/css/fontawesome.css')}}" rel="stylesheet" type="text/css" />
     <!-- Layout config Js -->
     <script src="{{asset('assets/js/layout.js')}}"></script>
     <!-- Bootstrap Css -->
@@ -27,7 +27,7 @@
 
 <body>
     @include('sweetalert::alert')
-    <script src="http://localhost:8000/vendor/sweetalert/sweetalert.all.js"></script>
+    <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
     <div class="auth-page-wrapper pt-5">
         <!-- auth page bg -->
         <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
@@ -123,7 +123,7 @@
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
     <script src="{{ asset('assets/js/plugins.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{{asset('assets/jquery/jquery-3.6.0.min.js')}}"></script>
 
 
     <!-- particles js -->

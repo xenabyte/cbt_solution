@@ -10,7 +10,7 @@
     <meta content="{{ env('APP_NAME') }}" name="description" />
     <meta content="Ogundele Damilare(KoderiaNG)" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}">
 
     <!-- Layout config Js -->
     <script src="{{asset('assets/js/layout.js')}}"></script>
