@@ -335,8 +335,9 @@ class AdminController extends Controller
                 foreach ($records as $row) {
                     //check for existing student record
                     if($student = Student::where('matric_number',$row['matric_number'])->orWhere('reg_number', $row['reg_number'])->first()){
-                        alert()->error('Oops', $row['firstname'].' '.$row['lastname'].' in the file is having same record with '. $student->firstname.' '.$student->lastname .' in the database, kindly check')->persistent('Close');
-                        return redirect()->back();
+                        continue;
+                        // alert()->error('Oops', $row['firstname'].' '.$row['lastname'].' in the file is having same record with '. $student->firstname.' '.$student->lastname .' in the database, kindly check')->persistent('Close');
+                        // return redirect()->back();
                     }
 
                     $password = !empty($row['matric_number']) ?  $row['matric_number'] : $row['reg_number'];
