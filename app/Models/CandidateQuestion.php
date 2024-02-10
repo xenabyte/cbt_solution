@@ -16,6 +16,7 @@ class CandidateQuestion extends Model
      * @var array
      */
     protected $fillable = [
+        'examination_id',
         'candidate_id', 
         'question_id', 
         'candidate_option',

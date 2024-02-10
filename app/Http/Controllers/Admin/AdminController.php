@@ -1005,4 +1005,34 @@ class AdminController extends Controller
         alert()->error('Oops!', 'Something went wrong')->persistent('Close');
         return redirect()->back();
     }
+
+    public function clearCandidates(Request $request){
+        $validator = Validator::make($request->all(), [
+            'examination_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$examination = Examination::find($request->examination_id)){
+            alert()->error('Oops', 'Invalid Examination')->persistent('Close');
+            return redirect()->back();
+        }
+
+        $candidates = Candidate::where('examination_id', $examination->id)->get();
+
+        foreach ($candidates as $candidate) {
+            $candidateQuestions = CandidateQuestion::where('candidate_id', $candidate->id)->where('examination_id', $examination->id)->forceDelete();
+        }
+        
+        if ($candidates->forceDelete()) {
+            alert()->success('Records Deleted', '')->persistent('Close');
+        }        
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+
+    }
 }

@@ -155,6 +155,7 @@
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Assessment Candidates</h4>
                             <div class="flex-shrink-0">
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#clearCandidates">Clear Candidates</button>
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bulkUpload">Bulk Upload Candidate</button>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSingleCandidate">Add Candidate</button>
                             </div>
@@ -647,6 +648,32 @@
                                 <button type="submit" class="btn btn-info w-100">Save Changes</button>
         
                             </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+            <div id="clearCandidates" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body text-center p-5">
+                            <div class="text-end">
+                                <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="mt-2">
+                                <lord-icon src="https://cdn.lordicon.com/wwneckwc.json" trigger="hover" style="width:150px;height:150px">
+                                </lord-icon>
+                                <h4 class="mb-3 mt-4">Are you sure you want to remove all candidates for <br/> {{ $examination->title }}? This will delete all candidates and allocated questions to candidates</h4>
+                                <form action="{{ url('/admin/clearCandidates') }}" method="POST">
+                                    @csrf
+                                    <input name="examination_id" type="hidden" value="{{$examination->id}}">
+                                    <hr>
+                                    <button type="submit" id="submit-button" class="btn btn-primary w-100">Yes, Approve</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light p-3 justify-content-center">
+            
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->

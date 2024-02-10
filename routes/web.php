@@ -72,6 +72,8 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/deleteAdmin', [App\Http\Controllers\Admin\AdminController::class, 'deleteAdmin'])->name('deleteAdmin');
 
 
+  Route::post('/clearCandidates', [App\Http\Controllers\Admin\AdminController::class, 'clearCandidates'])->name('clearCandidates');
+
 });
 
 Route::group(['prefix' => 'student'], function () {

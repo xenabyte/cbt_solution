@@ -107,6 +107,7 @@ class HomeController extends Controller
         
         foreach($questions as $question){
             CandidateQuestion::create([
+                'examination_id' => $request->examination_id,
                 'candidate_id' => $candidate->id,
                 'question_id' => $question->id,
             ]);
