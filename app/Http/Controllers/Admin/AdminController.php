@@ -1024,15 +1024,15 @@ class AdminController extends Controller
         $candidates = Candidate::where('examination_id', $examination->id)->get();
 
         foreach ($candidates as $candidate) {
-            $candidateQuestions = CandidateQuestion::where('candidate_id', $candidate->id)->where('examination_id', $examination->id)->forceDelete();
+            $candidateQuestions = CandidateQuestion::where('examination_id', $examination->id)->where('candidate_id', $candidate->id)->forceDelete();
         }
         
-        if ($candidates->forceDelete()) {
-            alert()->success('Records Deleted', '')->persistent('Close');
-        }        
-
-        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        // After deleting candidate questions, delete candidates
+        foreach ($candidates as $candidate) {
+            $candidate->forceDelete();
+        }
+        
+        alert()->success('Records Deleted', '')->persistent('Close');
         return redirect()->back();
-
     }
 }
