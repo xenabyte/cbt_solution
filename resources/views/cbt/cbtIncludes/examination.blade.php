@@ -62,8 +62,11 @@
                                             </div>
                                             <div class="d-flex align-items-start gap-3 mt-4">
                                                 @if($loop->iteration > 1)<button type="button" class="btn btn-light btn-label previestab" data-previous="question{{ $loop->iteration - 1 }}"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i> Previous</button>@endif
-                                                <button type="button" class="btn btn-primary btn-label right ms-auto previestab" data-previous="question{{ $loop->iteration + 1 }}"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
-                                            </div>
+                                                @if($loop->last)
+                                                    <button type="button" data-bs-toggle="modal" data-bs-target="#cbtSubmit{{$examination->id}}" class="btn btn-success btn-block btn-label right ms-auto nexttab nexttab"><i class="ri-checkbox-circle-fill label-icon align-middle fs-16 ms-2"></i>Submit</button>
+                                                @else
+                                                    <button type="button" class="btn btn-primary btn-label right ms-auto previestab" data-previous="question{{ $loop->iteration + 1 }}"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
+                                                @endif
                                         </div>
                                         @endforeach
                                     </div>
