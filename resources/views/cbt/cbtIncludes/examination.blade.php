@@ -30,7 +30,7 @@
                                         <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
                                             @foreach($candidateQuestions as $candidateQuestion)
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link @if($loop->iteration == 1) active @endif" id="question{{$loop->iteration}}" data-bs-toggle="pill" data-bs-target="#question{{$loop->iteration}}-tab" type="button" role="tab" aria-controls="question{{$loop->iteration}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
+                                                <button class="nav-link @if($loop->iteration == 1) active @endif @if(empty($candidateQuestion->candidate_option)) bg-danger @endif " id="question{{$loop->iteration}}" data-bs-toggle="pill" data-bs-target="#question{{$loop->iteration}}-tab" type="button" role="tab" aria-controls="question{{$loop->iteration}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
                                             </li>
                                             @endforeach
                                         </ul>
@@ -62,7 +62,11 @@
                                             </div>
                                             <div class="d-flex align-items-start gap-3 mt-4">
                                                 @if($loop->iteration > 1)<button type="button" class="btn btn-light btn-label previestab" data-previous="question{{ $loop->iteration - 1 }}"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i> Previous</button>@endif
-                                                <button type="button" class="btn btn-primary btn-label right ms-auto previestab" data-previous="question{{ $loop->iteration + 1 }}"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
+                                                @if(!$loop->last)
+                                                    <button type="button" class="btn btn-primary btn-label right ms-auto previestab" data-previous="question{{ $loop->iteration + 1 }}"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
+                                                @else
+                                                    <button type="button" data-bs-toggle="modal" data-bs-target="#cbtSubmit{{$examination->id}}" class="btn btn-success btn-block btn-label right ms-auto ms-auto previestab"><i class="ri-checkbox-circle-fill label-icon align-middle fs-16 ms-2"></i>Submit</button>
+                                                @endif
                                             </div>
                                         </div>
                                         @endforeach

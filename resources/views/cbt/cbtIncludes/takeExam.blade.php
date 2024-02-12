@@ -70,20 +70,3 @@
     <!-- container-fluid -->
 </div>
 <!-- End Page-content -->
-
-<script>
-    $(document).ready(function() {
-      $("#submit-button").click(function() {
-        // Disable the button
-        $(this.form).submit();
-
-        $(this).prop("disabled", true);
-    
-        // Remove the text
-        $(this).text("");
-    
-        // Replace the text with a spinner
-        $(this).html("<i class='fa fa-spinner fa-spin'></i>");
-      });
-    });
-</script>

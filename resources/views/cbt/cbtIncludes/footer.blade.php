@@ -35,6 +35,8 @@
 <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
 <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+<script src="{{asset('assets/jquery/jquery-3.6.0.min.js')}}"></script>
+
 {{-- <script src="{{ asset('assets/js/plugins.js') }}"></script> --}}
 
 <!-- form wizard init -->
@@ -45,6 +47,22 @@
 
 <!-- App js -->
 <script src="{{ asset('assets/js/app.js') }}"></script>
+<script>
+    $(document).ready(function() {
+      $("#submit-button").click(function() {
+        // Disable the button
+        $(this.form).submit();
+
+        $(this).prop("disabled", true);
+    
+        // Remove the text
+        $(this).text("");
+    
+        // Replace the text with a spinner
+        $(this).html("<i class='fa fa-spinner fa-spin'></i>");
+      });
+    });
+</script>
 </body>
 
 </html>
