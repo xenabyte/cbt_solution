@@ -533,7 +533,7 @@ class AdminController extends Controller
 
                     if(!empty($row['question_text'])){
                         $questionData = [
-                            'text' => $row['question_text'],
+                            'text' => trim($row['question_text']),
                             'examination_id' => $request->examination_id,
                         ];
     
@@ -544,8 +544,8 @@ class AdminController extends Controller
                         foreach ($row as $key => $value) {
                             if (strpos($key, 'option_') === 0 && !empty($value)) {
                                 $optionData = [
-                                    'option_text' => $value,
-                                    'is_correct' => ($value == $row['answer']) ? 1 : 0,
+                                    'option_text' => trim($value),
+                                    'is_correct' => (trim($value) == trim($row['answer'])) ? 1 : 0,
                                 ];
 
                                 if ($optionData['is_correct']) {
