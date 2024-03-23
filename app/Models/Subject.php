@@ -11,10 +11,12 @@ class Subject extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'slug',
         'subject',
         'examination_type_id',
         'code',
-        'description'
+        'description',
+        'admin_id'
     ];
 
      /**
@@ -24,11 +26,31 @@ class Subject extends Model
      */
     public function questions()
     {
-        return $this->hasMany(Questions::class, 'subject_id', 'id');
+        return $this->hasMany(Question::class, 'subject_id', 'id');
     }
 
     public static function getExamTypeId ( $type ) {
         $type = self::where('type', $type)->first();
         return $type['id'];
+    }
+
+    /**
+     * Get the question that owns the Option
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function type()
+    {
+        return $this->belongsTo(ExaminationType::class, 'examination_type_id');
+    }
+
+    /**
+     * Get the admin that owns the Subject
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
     }
 }

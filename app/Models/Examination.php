@@ -19,11 +19,10 @@ class Examination extends Model
     protected $fillable = [
         'admin_id', 
         'title', 
-        'code', 
         'description',
+        'examination_type_id',
         'duration',
         'mark',
-        'question_number',
         'slug',
         'status'
     ];
@@ -39,16 +38,6 @@ class Examination extends Model
     }
 
     /**
-     * Get all of the questions for the Examination
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function questions()
-    {
-        return $this->hasMany(Question::class);
-    }
-
-    /**
      * Get all of the candidates for the Examination
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -57,4 +46,15 @@ class Examination extends Model
     {
         return $this->hasMany(Candidate::class);
     }
+
+    /**
+     * Get the type that owns the exam
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function type()
+    {
+        return $this->belongsTo(ExaminationType::class, 'examination_type_id');
+    }
+
 }

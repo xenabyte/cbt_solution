@@ -204,6 +204,21 @@
                     </div>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#subject" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                        <i class="mdi mdi-book"></i> <span data-key="t-forms">Subjects</span>
+                    </a>
+                    
+                    <div class="collapse menu-dropdown" id="subject">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('admin/subjects') }}"
+                                    data-key="t-profile">Subject(s)/Course(s)
+                                </a>
+                            </li>   
+                        </ul>
+                    </div>
+                </li>
                 @endif
 
                 <li class="nav-item">

@@ -24,6 +24,9 @@ use App\Models\Option;
 use App\Models\Question;
 use App\Models\Student;
 use App\Models\Media;
+use App\Models\Subject;
+use App\Models\ExaminationType;
+use App\Models\CandidateExamSubject;
 
 
 class AdminController extends Controller
@@ -43,29 +46,34 @@ class AdminController extends Controller
 
     public function index(){
         $admin = Auth::guard('admin')->user();
-        $examinations = Examination::with('admin', 'questions', 'candidates', 'candidates.student' )->where('admin_id', $admin->id)->orderBy('id', 'DESC')->get();
+        $examinations = Examination::with('admin', 'candidates', 'candidates.student' )->where('admin_id', $admin->id)->orderBy('id', 'DESC')->get();
         
         if(empty($admin->role)){
-            $examinations = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->orderBy('id', 'DESC')->get();
+            $examinations = Examination::with('admin', 'candidates', 'candidates.student')->orderBy('id', 'DESC')->get();
         }
         $students = Student::all();
+        $examinationTypes = ExaminationType::all();
 
         return view('admin.home', [
             'examinations' => $examinations,
-            'students' => $students
+            'students' => $students,
+            'examinationTypes' => $examinationTypes
         ]);
     }
 
     public function examinations(){
         $admin = Auth::guard('admin')->user();
-        $examinations = Examination::with('admin', 'questions', 'candidates')->where('admin_id', $admin->id)->orderBy('id', 'DESC')->get();
+        $examinations = Examination::with('admin', 'candidates')->where('admin_id', $admin->id)->orderBy('id', 'DESC')->get();
 
         if(empty($admin->role)){
-            $examinations = Examination::with('admin', 'questions', 'candidates')->orderBy('id', 'DESC')->get();
+            $examinations = Examination::with('admin', 'candidates')->orderBy('id', 'DESC')->get();
         }
 
+        $examinationTypes = ExaminationType::all();
+
         return view('admin.examination', [
-            'examinations' => $examinations
+            'examinations' => $examinations,
+            'examinationTypes' => $examinationTypes
         ]);
     }
     
@@ -75,9 +83,7 @@ class AdminController extends Controller
             'title' => 'required|min:1',
             'description' => 'required',
             'duration' => 'required',
-            'mark' => 'required',
-            'code' => 'required',
-            'question_number' => 'required',
+            'examination_type_id' => 'required',
         ]);
 
         if($validator->fails()) {
@@ -92,9 +98,7 @@ class AdminController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'duration' => $request->duration,
-            'mark' => $request->mark,
-            'code' => $request->code,
-            'question_number' => $request->question_number,
+            'examination_type_id' => $request->examination_type_id,
             'slug' => $slug,
             'status' => 0
         ]);
@@ -161,20 +165,12 @@ class AdminController extends Controller
             $examination->description = $request->description;
         }
 
-        if(!empty($request->mark) &&  $request->mark != $examination->mark){
-            $examination->mark = $request->mark;
-        }
-
         if(!empty($request->duration) &&  $request->duration != $examination->duration){
             $examination->duration = $request->duration;
         }
 
-        if(!empty($request->question_number) &&  $request->question_number != $examination->question_number){
-            $examination->question_number = $request->question_number;
-        }
-
-        if(!empty($request->code) &&  $request->code != $examination->code){
-            $examination->code = $request->code;
+        if(!empty($request->examination_type_id) &&  $request->examination_type_id != $subject->examination_type_id){
+            $subject->examination_type_id = $request->examination_type_id;
         }
 
         if(!empty($request->status) &&  $request->status != $examination->status){
@@ -191,10 +187,13 @@ class AdminController extends Controller
     }
 
     public function getExamination($slug){
-        $examination = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->where('slug', $slug)->first();
+        $examination = Examination::with('admin', 'candidates', 'candidates.student')->where('slug', $slug)->first();
+
+        $examinationTypes = ExaminationType::all();
 
         return view('admin.singleExamination', [
-            'examination' => $examination
+            'examination' => $examination,
+            'examinationTypes' => $examinationTypes
         ]);
     }
 
@@ -426,6 +425,12 @@ class AdminController extends Controller
                 return redirect()->back();
             }
     
+
+            if(!$examination = Examination::find($request->examination_id)){
+                alert()->error('Oops', 'Invalid Examination')->persistent('Close');
+                return redirect()->back();
+            }
+
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
     
@@ -439,25 +444,53 @@ class AdminController extends Controller
                 $records = $csv->getRecords();
     
                 foreach ($records as $row) {
+                    $regNumber = $row['reg_number'];
+                    
+
                     //check for existing student record
-                    if(!$student = Student::where('matric_number',$row['matric_number'])->orWhere('reg_number', $row['reg_number'])->first()){
-                        Student::create([
-                            'firstname' => $row['firstname'],
-                            'lastname' => $row['lastname'],
-                            'email' => $row['email'],
-                            'matric_number' => $row['matric_number'],
-                            'reg_number' => $row['reg_number'],
-                        ]);
+                    if(!$student = Student::where('matric_number',$row['reg_number'])->first()){
+                        $message = "Student with registration number " . $row['reg_number'] . " does not exist";
+                        alert()->error('oops!!', $message)->persistent('Close');
+                        return redirect()->back();
                     }
 
-                    $student = Student::where('matric_number',$row['matric_number'])->orWhere('reg_number', $row['reg_number'])->first();
+                    $student = Student::where('matric_number', $row['reg_number'])->first();
 
                     if(!$candidate = Candidate::where('examination_id', $request->examination_id)->where('student_id', $student->id)->first()){
-                        Candidate::create([
+                        $candidate = Candidate::create([
                             'examination_id' => $request->examination_id,
                             'student_id' => $student->id,
                             'result' => 0
                         ]);
+                    }
+
+                    foreach ($row as $key => $value) {
+                        if (strpos($key, 'subject_') === 0 && !empty($value)) {
+
+                            $parts = explode(':', $value);
+                            $subjectName = trim($parts[0]);
+                            $questionQuantity = trim($parts[1]);
+                            $mark = trim($parts[2]);
+
+                            $subject = Subject::where('subject', trim($subjectName))->where('examination_type_id', $examination->examination_type_id)->first();
+                            Log::info($subject);
+                            if (!$subject) {
+                                $message = $subjectName . " does not exist";
+                                alert()->error('Oops', $message)->persistent('Close');
+                                return redirect()->back();
+                            }
+
+                            $subjectData = [
+                                'examination_id' =>$request->examination_id,
+                                'subject_id' => $subject->id,
+                                'question_quantity' => $questionQuantity,
+                                'question_mark' => $mark,
+                                'candidate_id' => $candidate->id,
+                            ];
+
+                            CandidateExamSubject::create($subjectData);
+    
+                        }
                     }
 
                 }
@@ -509,67 +542,124 @@ class AdminController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'file' => 'required',
-                'examination_id' => 'required',
+                'subject_id' => 'required',
             ]);
     
             if($validator->fails()) {
                 alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
                 return redirect()->back();
             }
-    
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-    
-                // Create a CSV reader instance
-                $csv = Reader::createFromPath($file->getPathname());
-    
-                // Set the header offset (skip the first row)
-                $csv->setHeaderOffset(0);
-    
-                // Get all records from the CSV file
-                $records = $csv->getRecords();
-    
-                foreach ($records as $row) {
 
-                    if(!empty($row['question_text'])){
-                        $questionData = [
-                            'text' => trim($row['question_text']),
-                            'examination_id' => $request->examination_id,
-                        ];
-    
-            
-                        $optionsData = [];
-                        $isCorrectOptionSet = false;
-    
-                        foreach ($row as $key => $value) {
-                            if (strpos($key, 'option_') === 0 && !empty($value)) {
-                                $optionData = [
-                                    'option_text' => trim($value),
-                                    'is_correct' => (trim($value) == trim($row['answer'])) ? 1 : 0,
-                                ];
-
-                                if ($optionData['is_correct']) {
-                                    $isCorrectOptionSet = true;
-                                }
-            
-                                $optionsData[] = $optionData;
-                            }
-                        }
-            
-                        if ($isCorrectOptionSet) {
-                            $question = Question::create($questionData);
-                            $question->options()->createMany($optionsData);
-                        }
-                    }
-                }
-    
-                alert()->success('Changes Saved', 'Examination question uploaded successfully')->persistent('Close');
+            if(!$subject = Subject::find($request->subject_id)){
+                alert()->error('Oops', 'Invalid Subject')->persistent('Close');
                 return redirect()->back();
             }
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $extension = $file->getClientOriginalExtension(); // Get the file extension
+                
+                if ($extension === 'csv') {
+                    $this->processCsvFile($file, $request);
+                } elseif ($extension === 'txt') {
+                    $this->processTxtFile($file, $request);
+                } else {
+                    alert()->error('Oops', 'Unsupported file type.')->persistent('Close');
+                    return redirect()->back();
+                }
+            }
+
+            alert()->success('Good Job', 'Question Upload Successful')->persistent('Close');
+            return redirect()->back();
+
         } catch (QueryException $e) {
             $errorMessage = 'Something went wrong';
             alert()->error('Oops!', $errorMessage)->persistent('Close');
             return redirect()->back();
+        }
+    }
+
+    public function processCsvFile($file, $request){
+
+        $file = $request->file('file');
+        $csv = Reader::createFromPath($file->getPathname());
+
+        $csv->setHeaderOffset(0);
+
+        $records = $csv->getRecords();
+
+        foreach ($records as $row) {
+
+            if(!empty($row['question_text'])){
+                $questionData = [
+                    'text' => trim($row['question_text']),
+                    'subject_id' => $request->subject_id,
+                ];
+
+                $optionsData = [];
+                $isCorrectOptionSet = false;
+
+                foreach ($row as $key => $value) {
+                    if (strpos($key, 'option_') === 0 && !empty($value)) {
+                        $optionData = [
+                            'option_text' => trim($value),
+                            'is_correct' => (trim($value) == trim($row['answer'])) ? 1 : 0,
+                        ];
+
+                        if ($optionData['is_correct']) {
+                            $isCorrectOptionSet = true;
+                        }
+    
+                        $optionsData[] = $optionData;
+                    }
+                }
+    
+                if ($isCorrectOptionSet) {
+                    $question = Question::create($questionData);
+                    $question->options()->createMany($optionsData);
+                }
+            }
+        }
+    }
+
+    
+    public function processTxtFile($file, $request) {
+        $content = file_get_contents($file->getPathname());
+        $questionsData = explode("\n\n", $content);
+        $subjectId = $request->subject_id;
+    
+        foreach ($questionsData as $questionData) {
+            $lines = explode("\n", $questionData);
+            $currentQuestion = null;
+            $optionsData = [];
+            $isCorrectOptionSet = false;
+    
+            foreach ($lines as $line) {
+                if (empty(trim($line))) {
+                    continue;
+                }
+    
+                $parts = explode(':', $line);
+                $key = trim($parts[0]);
+                $value = trim($parts[1]);
+    
+                if ($key === 'question') {
+                    $currentQuestion = Question::create(['text' => $value, 'subject_id' => $subjectId]);
+                } elseif ($key === 'answer') {
+                    $isCorrectOptionSet = true;
+                    Option::create([
+                        'question_id' => $currentQuestion->id,
+                        'option_text' => $value,
+                        'is_correct' => true,
+                    ]);
+                } elseif ($key === 'option') {
+                    Option::create([
+                        'question_id' => $currentQuestion->id,
+                        'option_text' => $value,
+                        'is_correct' => false,
+                    ]);
+                }
+            }
         }
     }
 
@@ -1027,12 +1117,196 @@ class AdminController extends Controller
             $candidateQuestions = CandidateQuestion::where('examination_id', $examination->id)->where('candidate_id', $candidate->id)->forceDelete();
         }
         
-        // After deleting candidate questions, delete candidates
         foreach ($candidates as $candidate) {
             $candidate->forceDelete();
         }
         
         alert()->success('Records Deleted', '')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function subjects(){
+        $admin = Auth::guard('admin')->user();
+        $subjects = Subject::with('admin', 'questions', 'type')->where('admin_id', $admin->id)->orderBy('id', 'DESC')->get();
+
+        if(empty($admin->role)){
+            $subjects = Subject::with('admin', 'questions', 'type')->orderBy('id', 'DESC')->get();
+        }
+
+        $examinationTypes = ExaminationType::all();
+
+        return view('admin.subjects', [
+            'subjects' => $subjects,
+            'examinationTypes' => $examinationTypes
+        ]);
+    }
+    
+
+    public function addSubject(Request $request){
+        $validator = Validator::make($request->all(), [
+            'subject' => 'required|min:1',
+            'description' => 'required',
+            'examination_type_id' => 'required',
+            'code' => 'nullable',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($subject = Subject::where('subject', $request->subject)->where('examination_type_id', $request->examination_type_id)->where('code', $request->code)->first()){
+            alert()->error('Oops', 'Subject/Course already exist')->persistent('Close');
+            return redirect()->back();
+        }
+
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->subject.$request->examination_type_id.$request->code)));
+
+        $newSubject = ([
+            'admin_id' => Auth::guard('admin')->user()->id,
+            'subject' => $request->subject,
+            'description' => $request->description,
+            'code' => $request->code,
+            'examination_type_id' => $request->examination_type_id,
+            'slug' => $slug,
+        ]);
+
+        if(Subject::create($newSubject)){
+            alert()->success('Subject Created successfully', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+        
+    }
+
+    public function deleteSubject(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'subject_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$subject = Subject::find($request->subject_id)){
+            alert()->error('Oops', 'Invalid Subject')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if($subject->delete()){
+            alert()->success('Record Deleted', '')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function updateSubject(Request $request){
+        $validator = Validator::make($request->all(), [
+            'subject_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$subject = Subject::find($request->subject_id)){
+            alert()->error('Oops', 'Invalid Subject')->persistent('Close');
+            return redirect()->back();
+        }
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->suject)));
+
+
+        if(!empty($request->suject) &&  $request->suject != $subject->suject){
+            $subject->suject = $request->suject;
+            $subject->slug = $slug;
+        }
+
+        if(!empty($request->description) &&  $request->description != $subject->description){
+            $subject->description = $request->description;
+        }
+
+        if(!empty($request->examination_type_id) &&  $request->examination_type_id != $subject->examination_type_id){
+            $subject->examination_type_id = $request->examination_type_id;
+        }
+
+        if(!empty($request->code) &&  $request->code != $subject->code){
+            $subject->code = $request->code;
+        }
+
+        if($subject->save()){
+            alert()->success('Changes Saved', 'Subject changes saved successfully')->persistent('Close');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function getSubject($slug){
+        $subject = Subject::with('admin', 'questions')->where('slug', $slug)->first();
+        $examinationTypes = ExaminationType::all();
+
+        return view('admin.subject', [
+            'subject' => $subject,
+            'examinationTypes' => $examinationTypes
+        ]);
+    }
+
+    public function generateCandidateQuestions(Request $request){
+        $validator = Validator::make($request->all(), [
+            'examination_id' => 'required|min:1',
+        ]);
+
+        if($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if(!$examination = Examination::with('candidates')->where('id', $request->examination_id)->first()){
+            alert()->error('Oops', 'Invalid Examination')->persistent('Close');
+            return redirect()->back();
+        }
+
+        $candidates = $examination->candidates;
+
+        if($candidates->count() < 1){
+            alert()->error('Oops', 'No candidate have been enrolled for this examination')->persistent('Close');
+            return redirect()->back();
+        }
+
+        foreach($candidates as $candidate){
+            $candidateSubjects = CandidateExamSubject::where('examination_id', $request->examination_id)->where('candidate_id', $candidate->id)->get();
+            
+            foreach($candidateSubjects as $candidateSubject){
+                $questionQuantity = $candidateSubject->question_quantity;
+                
+                // set candidate question
+                $questions = Question::where('subject_id', $candidateSubject->subject_id)->inRandomOrder()->limit($questionQuantity)->get();
+                
+                foreach($questions as $question){
+                    CandidateQuestion::create([
+                        'examination_id' => $request->examination_id,
+                        'candidate_id' => $candidate->id,
+                        'question_id' => $question->id,
+                        'candidate_exam_subject_id' => $candidateSubject->id
+                    ]);
+                }
+
+            }
+
+        }
+
+
+        alert()->success('Good Job!!', 'Questions generated successfully')->persistent('Close');
         return redirect()->back();
     }
 }

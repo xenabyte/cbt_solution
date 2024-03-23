@@ -37,8 +37,14 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/addExamination', [App\Http\Controllers\Admin\AdminController::class, 'addExamination'])->name('addExamination');
   Route::post('/updateExamination', [App\Http\Controllers\Admin\AdminController::class, 'updateExamination'])->name('updateExamination');
   Route::post('/deleteExamination', [App\Http\Controllers\Admin\AdminController::class, 'deleteExamination'])->name('deleteExamination');
-
   Route::get('/examination/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'getExamination'])->name('getExamination');
+
+  Route::get('/subjects', [App\Http\Controllers\Admin\AdminController::class, 'subjects'])->name('subjects');
+  Route::post('/addSubject', [App\Http\Controllers\Admin\AdminController::class, 'addSubject'])->name('addSubject');
+  Route::post('/updateSubject', [App\Http\Controllers\Admin\AdminController::class, 'updateSubject'])->name('updateSubject');
+  Route::post('/deleteSubject', [App\Http\Controllers\Admin\AdminController::class, 'deleteSubject'])->name('deleteSubject');
+  Route::get('/subject/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'getSubject'])->name('getSubject');
+
 
   Route::get('/students', [App\Http\Controllers\Admin\AdminController::class, 'students'])->name('students');
   Route::post('/addSingleStudent', [App\Http\Controllers\Admin\AdminController::class, 'addSingleStudent'])->name('addSingleStudent');
@@ -46,10 +52,10 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/updateStudent', [App\Http\Controllers\Admin\AdminController::class, 'updateStudent'])->name('updateStudent');
   Route::post('/deleteStudent', [App\Http\Controllers\Admin\AdminController::class, 'deleteStudent'])->name('deleteStudent');
 
-  Route::post('/addSingleCandidate', [App\Http\Controllers\Admin\AdminController::class, 'addSingleCandidate'])->name('addSingleCandidate');
   Route::post('/addBulkCandidate', [App\Http\Controllers\Admin\AdminController::class, 'addBulkCandidate'])->name('addBulkCandidate');
   Route::post('/deleteCandidate', [App\Http\Controllers\Admin\AdminController::class, 'deleteCandidate'])->name('deleteCandidate');
   
+  Route::post('/generateCandidateQuestions', [App\Http\Controllers\Admin\AdminController::class, 'generateCandidateQuestions'])->name('generateCandidateQuestions');
 
   Route::post('/uploadBulkQuestion', [App\Http\Controllers\Admin\AdminController::class, 'uploadBulkQuestion'])->name('uploadBulkQuestion');
   Route::post('/deleteOption', [App\Http\Controllers\Admin\AdminController::class, 'deleteOption'])->name('deleteOption');
