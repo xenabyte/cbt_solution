@@ -20,7 +20,8 @@ class CandidateQuestion extends Model
         'candidate_id', 
         'question_id', 
         'candidate_option',
-        'candidate_is_correct'
+        'candidate_is_correct',
+        'subject_id'
     ];
 
     /**
@@ -42,4 +43,15 @@ class CandidateQuestion extends Model
     {
         return $this->belongsTo(Question::class, 'question_id');
     }
+
+    /**
+     * Get the question that owns the CandidateQuestion
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id');
+    }
+
 }

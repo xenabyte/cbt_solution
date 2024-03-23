@@ -16,18 +16,18 @@ class Question extends Model
      * @var array
      */
     protected $fillable = [
-        'examination_id', 
+        'subject_id', 
         'text', 
     ];
 
     /**
-     * Get the examination that owns the Question
+     * Get the subject that owns the Question
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function examination()
+    public function subject()
     {
-        return $this->belongsTo(Examination::class, 'examination_id');
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     /**
