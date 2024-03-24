@@ -23,6 +23,7 @@ use App\Models\Candidate;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\Student;
+use App\Models\CandidateExamSubject;
 
 class HomeController extends Controller
 {
@@ -47,22 +48,43 @@ class HomeController extends Controller
 
     public function takeExam($slug){
         $userId = Auth::guard('student')->user()->id;
-        $examination = Examination::with('admin', 'questions', 'candidates', 'candidates.student')->where('slug', $slug)->first();
+    
+        $examination = Examination::with('admin', 'candidates', 'candidates.student')->where('slug', $slug)->first();
+    
         $candidate = Candidate::where('student_id', $userId)->where('examination_id', $examination->id)->where('status', null)->first();
-
+    
+        $candidateExamSubjects = CandidateExamSubject::with('subject')
+            ->where('candidate_id', $candidate->id)
+            ->where('examination_id', $examination->id)
+            ->get();
+    
         $candidateQuestions = CandidateQuestion::with('candidate', 'candidate.student', 'question', 'question.options')
-        ->where('candidate_id', $candidate->id)
-        ->get()
-        ->each(function ($candidateQuestion) {
-            $candidateQuestion->question->options = $candidateQuestion->question->options->shuffle();
+            ->where('candidate_id', $candidate->id)
+            ->get()
+            ->each(function ($candidateQuestion) {
+                $candidateQuestion->question->options = $candidateQuestion->question->options->shuffle();
+            });
+    
+        $groupedCandidateQuestions = $candidateExamSubjects->flatMap(function ($candidateExamSubject) use ($candidateQuestions) {
+            $subjectQuestions = $candidateQuestions->filter(function ($candidateQuestion) use ($candidateExamSubject) {
+                return $candidateQuestion->question->subject_id === $candidateExamSubject->subject_id;
+            });
+    
+            return [
+                $candidateExamSubject->subject->subject => $subjectQuestions,
+            ];
         });
 
+    
         return view('takeExam', [
             'examination' => $examination,
             'candidate' => $candidate,
+            'groupedCandidateQuestions' => $groupedCandidateQuestions,
+            'candidateExamSubjects' => $candidateExamSubjects,
             'candidateQuestions' => $candidateQuestions
         ]);
     }
+    
 
     public function startExam(Request $request){
         $validator = Validator::make($request->all(), [
@@ -98,20 +120,10 @@ class HomeController extends Controller
         });
 
 
-        if($candidateQuestions->count() >= $examination->question_number) {
+        if($candidateQuestions->count() >= $examination->question_number && $candidate->exam_start_at != null) {
             return redirect()->back();
         }
 
-        // set candidate question
-        $questions = Question::where('examination_id', $request->examination_id)->inRandomOrder()->limit($examination->question_number)->get();
-        
-        foreach($questions as $question){
-            CandidateQuestion::create([
-                'examination_id' => $request->examination_id,
-                'candidate_id' => $candidate->id,
-                'question_id' => $question->id,
-            ]);
-        }
 
         $candidateQuestions = CandidateQuestion::with('candidate', 'candidate.student', 'question', 'question.options')
         ->where('candidate_id', $candidate->id)
@@ -159,17 +171,43 @@ class HomeController extends Controller
     public function forceSubmit(Request $request){
 
         $userId = Auth::guard('student')->user()->id;
-        $examination = Examination::find($request->examinationId);
-        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $request->examinationId)->first();
-        $candidateCorrectQuestion = CandidateQuestion::where('candidate_id', $candidate->id)->where('candidate_is_correct', 1)->count();
-        $result = $candidateCorrectQuestion * $examination->mark;
-        $candidate->result = $result;
-        $candidate->status = 'Force submitted';
+        $examination = Examination::findOrFail($request->examinationId);
+        $candidate = Candidate::where('student_id', $userId)
+            ->where('examination_id', $request->examinationId)
+            ->firstOrFail();
+
+        $candidateCorrectQuestions = CandidateQuestion::where('candidate_id', $candidate->id)
+            ->where('candidate_is_correct', 1)
+            ->with('question')
+            ->get();
+
+        $groupedCandidateQuestions = $candidateCorrectQuestions->groupBy('question.subject_id');
+
+        $totalScore = 0;
+
+        foreach ($groupedCandidateQuestions as $subjectId => $questions) {
+            $correctOptionsCount = $questions->count();
+            $candidateExamSubject = CandidateExamSubject::where('candidate_id', $candidate->id)
+                ->where('subject_id', $subjectId)
+                ->where('examination_id', $request->examinationId)
+                ->firstOrFail();
+
+            $subjectScore = ($correctOptionsCount / $candidateExamSubject->question_quantity) * $candidateExamSubject->question_mark;
+
+            $candidateExamSubject->student_score = $subjectScore;
+            $candidateExamSubject->save();
+
+            $totalScore += $subjectScore;
+        }
+
+        $candidate->result = round($totalScore);
+        $candidate->status = 'Submitted';
         $candidate->save();
 
         Auth::guard('student')->logout();
 
         return view('welcome');
+
     }
 
     public function submitExam(Request $request){
@@ -177,18 +215,43 @@ class HomeController extends Controller
             'candidateId' => 'required|min:1',
             'examinationId' => 'required|min:1',
         ]);
-
+    
         if($validator->fails()) {
             alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
             return redirect()->back();
         }
-
+    
         $userId = Auth::guard('student')->user()->id;
-        $examination = Examination::find($request->examinationId);
-        $candidate = Candidate::where('student_id', $userId)->where('examination_id', $request->examinationId)->first();
-        $candidateCorrectQuestion = CandidateQuestion::where('candidate_id', $candidate->id)->where('candidate_is_correct', 1)->count();
-        $result = $candidateCorrectQuestion * $examination->mark;
-        $candidate->result = $result;
+        $examination = Examination::findOrFail($request->examinationId);
+        $candidate = Candidate::where('student_id', $userId)
+            ->where('examination_id', $request->examinationId)
+            ->firstOrFail();
+
+        $candidateCorrectQuestions = CandidateQuestion::where('candidate_id', $candidate->id)
+            ->where('candidate_is_correct', 1)
+            ->with('question')
+            ->get();
+
+        $groupedCandidateQuestions = $candidateCorrectQuestions->groupBy('question.subject_id');
+
+        $totalScore = 0;
+
+        foreach ($groupedCandidateQuestions as $subjectId => $questions) {
+            $correctOptionsCount = $questions->count();
+            $candidateExamSubject = CandidateExamSubject::where('candidate_id', $candidate->id)
+                ->where('subject_id', $subjectId)
+                ->where('examination_id', $request->examinationId)
+                ->firstOrFail();
+
+            $subjectScore = ($correctOptionsCount / $candidateExamSubject->question_quantity) * $candidateExamSubject->question_mark;
+
+            $candidateExamSubject->student_score = $subjectScore;
+            $candidateExamSubject->save();
+
+            $totalScore += $subjectScore;
+        }
+
+        $candidate->result = round($totalScore);
         $candidate->status = 'Submitted';
         $candidate->save();
 
@@ -196,4 +259,5 @@ class HomeController extends Controller
 
         return view('welcome');
     }
+    
 }

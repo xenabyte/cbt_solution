@@ -5,7 +5,7 @@
     <!-- Start right Content here -->
     <!-- ============================================================== -->
     <div class="main-content">
-        @if($candidateQuestions->count() == 0)
+        @if($candidate->exam_start_at == null)
             @include('cbt.cbtIncludes.takeExam')
         @else
             @include('cbt.cbtIncludes.examination')

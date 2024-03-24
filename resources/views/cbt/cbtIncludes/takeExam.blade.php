@@ -21,25 +21,28 @@
                         <!-- Rounded Ribbon -->
                         <div class="card ribbon-box border mb-lg-0">
                             <div class="card-body">
-                                <div class="ribbon ribbon-primary round-shape">{{ $examination->code }}</div>
+                                <div class="ribbon ribbon-primary round-shape">{{ $examination->title }}</div>
                                 <h5 class="fs-14 text-end">{{ $examination->title }}</h5>
                                 <hr>
                                 <div class="ribbon-content mt-5 text-muted">
-                                    <h5 class="fs-14">Assessment Instruction</h5>
+                                    <h5 class="fs-14">Examination Instruction</h5>
 
-                                    <div class="card-body pt-0">
+                                    <div class="card-body mt-5 pt-0">
+                                        <h5 class="fs-11">Examination Subject(s)/Course(s)</h5>
+                                        @foreach($candidateExamSubjects as $candidateSubject)
                                         <div class="mini-stats-wid d-flex align-items-center mt-3">
-                                            Total Questions
+                                            {{ $candidateSubject->subject->subject }}
                                             <div class="flex-grow-1 ms-3">
                                                 <h6 class="mb-1"></h6>
                                             </div>
                                             <div class="form-check form-switch">
-                                                {{ $examination->question_number }} questions
+                                                {{ $candidateSubject->question_quantity }} questions
                                             </div>
                                         </div>
-    
+                                        @endforeach
+                                        <hr>
                                         <div class="mini-stats-wid d-flex align-items-center mt-3">
-                                        Assessment Duration
+                                        Examination Duration
                                             <div class="flex-grow-1 ms-3">
                                                 <h6 class="mb-1"></h6>
                                             </div>

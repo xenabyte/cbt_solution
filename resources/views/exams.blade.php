@@ -41,7 +41,7 @@
                                                             <tr>
                                                             @if($candidate->examination->status != 'Inactive')
                                                                 <td>
-                                                                    {{ ucwords($candidate->examination->title) }} ({{ $candidate->examination->code }})
+                                                                    {{ ucwords($candidate->examination->title) }}
                                                                 </td>
                                                             
                                                                 <td class="text-end">
