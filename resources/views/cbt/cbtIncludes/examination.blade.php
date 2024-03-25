@@ -37,60 +37,58 @@
                                 </ul>
                                 <!-- Tab panes -->
                                 <div class="tab-content  text-muted">
-                                    <form action="#" class="form-steps" autocomplete="off">
-                                        @foreach($groupedCandidateQuestions as $subjectName => $questions)
-                                        <div class="tab-pane @if($loop->first) show active @endif" id="subject_{{ $questions->first()->question->subject_id }}" role="tabpanel">
-                                            <div class="step-arrow-nav mb-4">
-                                                <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
-                                                    @foreach($candidateQuestions as $candidateQuestion)
-                                                    <li class="nav-item" role="presentation">
-                                                        <button class="nav-link @if($loop->iteration == 1) active @endif @if(empty($candidateQuestion->candidate_option)) bg-danger @endif " id="question{{$loop->iteration}}" data-bs-toggle="pill" data-bs-target="#question{{$loop->iteration}}-tab" type="button" role="tab" aria-controls="question{{$loop->iteration}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
-                                                    </li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-        
-                                            <div class="tab-content mt-5">
-                                                @foreach($candidateQuestions as $candidateQuestion)
-                                                <div class="tab-pane fade @if($loop->iteration == 1) show active @endif" id="question{{$loop->iteration}}-tab" role="tabpanel" aria-labelledby="question{{$loop->iteration}}">
-                                                    <div>
-                                                        <div class="row">
-                                                            <div class="col-lg-12 mb-5">
-                                                                <div class="mb-3">
-                                                                    <h5>Question {{ $loop->iteration }}: {!! $candidateQuestion->question->text !!}</h5>
+                                    @foreach($groupedCandidateQuestions as $subjectName => $questions)
+                                            <div class="tab-pane @if($loop->first) show active @endif" id="subject_{{ $questions->first()->question->subject_id }}" role="tabpanel">
+                                                <form action="#" class="form-steps" autocomplete="off">
+                                                <div class="step-arrow-nav mb-4">
+                                                    <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
+                                                        @foreach($questions as $candidateQuestion)
+                                                            <li class="nav-item" role="presentation">
+                                                                <button class="nav-link @if($loop->first) active @endif @if(empty($candidateQuestion->candidate_option)) bg-danger @endif " id="question-{{$loop->parent->iteration}}_{{$loop->iteration}}" data-bs-toggle="pill" data-bs-target="#question-{{$loop->parent->iteration}}_{{$loop->iteration}}-tab" type="button" role="tab" aria-controls="question-{{$loop->parent->iteration}}_{{$loop->iteration}}-tab" aria-selected="true">{{ $loop->iteration }}</button>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                    
+                                                <div class="tab-content mt-5">
+                                                    @foreach($questions as $candidateQuestion)
+                                                        <div class="tab-pane fade @if($loop->first) show active @endif" id="question-{{$loop->parent->iteration}}_{{$loop->iteration}}-tab" role="tabpanel" aria-labelledby="question-{{$loop->parent->iteration}}_{{$loop->iteration}}">
+                                                            <div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 mb-5">
+                                                                        <div class="mb-3">
+                                                                            <h5>Question {{ $loop->iteration }}: {!! $candidateQuestion->question->text !!}</h5>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-12">
+                                                                        @foreach($candidateQuestion->question->options as $option)
+                                                                            <div class="form-check mb-2">
+                                                                                <input class="form-check-input" type="radio" name="option{{ $candidateQuestion->question->id }}" id="option{{ $option->id }}" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
+                                                                                <label class="form-check-label" for="option{{ $option->id }}">
+                                                                                    {{ $option->option_text }}
+                                                                                </label>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-lg-12">
-                                                                @foreach($candidateQuestion->question->options as $option)
-                                                                <!-- Base Radios -->
-                                                                <div class="form-check mb-2">
-                                                                    <input class="form-check-input" type="radio" name="option{{ $candidateQuestion->question->id }}" id="option{{ $option->id }}" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="option{{ $option->id }}">
-                                                                        {{ $option->option_text }}
-                                                                    </label>
-                                                                </div>
-                                                                @endforeach
+                                                            <div class="d-flex align-items-start gap-3 mt-4">
+                                                                @if(!$loop->first)
+                                                                    <button type="button" class="btn btn-light btn-label previestab" data-previous="#question-{{$loop->parent->iteration}}_{{$loop->iteration - 1}}-tab"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i> Previous</button>
+                                                                @endif
+                                                                @if(!$loop->last)
+                                                                    <button type="button" class="btn btn-primary btn-label right ms-auto previestab" data-previous="#question-{{$loop->parent->iteration}}_{{$loop->iteration + 1}}-tab"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
+                                                                @else
+                                                                    {{-- <button type="button" data-bs-toggle="modal" data-bs-target="#cbtSubmit{{$examination->id}}" class="btn btn-success btn-block btn-label right ms-auto ms-auto previestab"><i class="ri-checkbox-circle-fill label-icon align-middle fs-16 ms-2"></i>Submit</button> --}}
+                                                                @endif
                                                             </div>
                                                         </div>
-                                                
-                                                    </div>
-                                                    <div class="d-flex align-items-start gap-3 mt-4">
-                                                        @if($loop->iteration > 1)<button type="button" class="btn btn-light btn-label previestab" data-previous="question{{ $loop->iteration - 1 }}"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i> Previous</button>@endif
-                                                        @if(!$loop->last)
-                                                            <button type="button" class="btn btn-primary btn-label right ms-auto previestab" data-previous="question{{ $loop->iteration + 1 }}"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Next</button>
-                                                        @else
-                                                            <button type="button" data-bs-toggle="modal" data-bs-target="#cbtSubmit{{$examination->id}}" class="btn btn-success btn-block btn-label right ms-auto ms-auto previestab"><i class="ri-checkbox-circle-fill label-icon align-middle fs-16 ms-2"></i>Submit</button>
-                                                        @endif
-                                                    </div>
+                                                    @endforeach
                                                 </div>
-                                                @endforeach
+                                                </form>
                                             </div>
-                                        </div>
-                                        @endforeach
-                                    </form>
+                                    @endforeach
                                 </div>
-                            
-
                             </div>
                             <!-- end card body -->
                         </div>
@@ -179,6 +177,32 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".form-steps").forEach(function (form) {
+            form.querySelectorAll(".previestab").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    var previousTabId = button.getAttribute("data-previous");
+                    var previousTab = document.querySelector(previousTabId);
+                    var currentTab = button.closest(".tab-pane");
+                    currentTab.classList.remove("show", "active");
+                    previousTab.classList.add("show", "active");
+                });
+            });
+
+            form.querySelectorAll(".nexttab").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    var nextTabId = button.getAttribute("data-nexttab");
+                    var nextTab = document.querySelector(nextTabId);
+                    var currentTab = button.closest(".tab-pane");
+                    currentTab.classList.remove("show", "active");
+                    nextTab.classList.add("show", "active");
+                });
+            });
+        });
+    });
+</script>
+
 <script>
     // Variable to store the selected option
     var selectedOption = null;

@@ -44,6 +44,7 @@
                                             <th scope="col">Subject Name</th>
                                             <th scope="col">Code</th>
                                             <th scope="col">Subject Exam Type</th>
+                                            <th scope="col">Subject Questions</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
@@ -54,6 +55,7 @@
                                             <td>{{ $subject->subject }} </td>
                                             <td>{{ $subject->code }} </td>
                                             <td>{{ $subject->type->type }} </td>
+                                            <td>{{ $subject->questions->count() }} </td>
                                             <td>
                                                 <div class="hstack gap-3 fs-15">
                                                     <a href="{{url('/admin/subject/'.$subject->slug)}}" class="link-info"><i class="ri-eye-line"></i></a>

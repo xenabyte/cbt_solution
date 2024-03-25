@@ -16,9 +16,9 @@ class SubnetAccess
 
         $subnet = env('APP_SUBNET'); // Change this to your desired subnet
 
-        if (!$this->isIpInSubnet($clientIp, $subnet)) {
-            abort(403, 'Unauthorized');
-        }
+        // if (!$this->isIpInSubnet($clientIp, $subnet)) {
+        //     abort(403, 'Unauthorized');
+        // }
 
         return $next($request);
     }

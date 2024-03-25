@@ -149,18 +149,25 @@
                                         <th scope="col">Lastname</th>
                                         <th scope="col">Matric Number</th>
                                         <th scope="col">Registration Number</th>
+                                        <th scope="col">Enrolled Subject(s)</th>
                                         <th scope="col">Result</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($examination->candidates as $candidate)
+                                    @php
+                                        $candidateSubjects = \App\Models\CandidateExamSubject::with('subject')->where('examination_id', $examination->id)->where('candidate_id', $candidate->id)->get();    
+                                    @endphp
                                     <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $candidate->student->firstname }} </td>
                                         <td>{{ $candidate->student->lastname }} </td>
                                         <td>{{ $candidate->student->matric_number }} </td>
                                         <td>{{ $candidate->student->reg_number }} </td>
+                                        <td>
+                                            @foreach($candidateSubjects as $candidateSubject) <li> {{ $candidateSubject->subject->subject}}  -   {{ $candidateSubject->student_score}}</li>@endforeach
+                                        </td>
                                         <td>{{ $candidate->result }} </td>
                                         <td>
                                             <div class="hstack gap-3 fs-15">
