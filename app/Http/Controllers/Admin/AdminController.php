@@ -625,43 +625,77 @@ class AdminController extends Controller
     
     public function processTxtFile($file, $request) {
         $content = file_get_contents($file->getPathname());
-        $questionsData = explode("\n\n", $content);
+        $lines = explode("\n", $content);
         $subjectId = $request->subject_id;
     
-        foreach ($questionsData as $questionData) {
-            $lines = explode("\n", $questionData);
-            $currentQuestion = null;
-            $optionsData = [];
-            $isCorrectOptionSet = false;
+        $questions = [];
+        $currentQuestion = null;
+        $optionsData = [];
     
-            foreach ($lines as $line) {
-                if (empty(trim($line))) {
-                    continue;
+        foreach ($lines as $line) {
+            if (empty(trim($line))) {
+                // Skip empty lines
+                continue;
+            }
+    
+            $parts = explode(':', $line, 2);
+            $key = trim($parts[0]);
+            $value = isset($parts[1]) ? trim($parts[1]) : '';
+    
+            if ($key === 'question') {
+                // Start a new question
+                if ($currentQuestion !== null && count($optionsData) > 0) {
+                    // Save the previous question and options
+                    $this->saveQuestionWithOptions($currentQuestion, $optionsData, $subjectId);
+                    $optionsData = [];
                 }
-    
-                $parts = explode(':', $line);
-                $key = trim($parts[0]);
-                $value = trim($parts[1]);
-    
-                if ($key === 'question') {
-                    $currentQuestion = Question::create(['text' => $value, 'subject_id' => $subjectId]);
-                } elseif ($key === 'answer') {
-                    $isCorrectOptionSet = true;
-                    Option::create([
-                        'question_id' => $currentQuestion->id,
-                        'option_text' => $value,
-                        'is_correct' => true,
-                    ]);
-                } elseif ($key === 'option') {
-                    Option::create([
-                        'question_id' => $currentQuestion->id,
-                        'option_text' => $value,
-                        'is_correct' => false,
-                    ]);
+                // Append to the current question text
+                $currentQuestion = [
+                    'text' => $value,
+                    'subject_id' => $subjectId,
+                ];
+            } elseif ($key === 'option') {
+                // Add option to the current question
+                $optionsData[] = [
+                    'option_text' => $value,
+                    'is_correct' => false,
+                ];
+            } elseif ($key === 'answer') {
+                // Mark correct options
+                $optionsData[] = [
+                    'option_text' => $value,
+                    'is_correct' => true,
+                ];
+            } else {
+                // Append to the current question text
+                if ($currentQuestion !== null) {
+                    $currentQuestion['text'] .= "\n" . $line;
                 }
             }
         }
+    
+        // Save the last question and options
+        if ($currentQuestion !== null) {
+            $this->saveQuestionWithOptions($currentQuestion, $optionsData, $subjectId);
+        }
     }
+    
+    private function saveQuestionWithOptions($question, $optionsData, $subjectId) {
+        // Save question
+        $currentQuestion = Question::create(['text' => $question['text'], 'subject_id' => $subjectId]);
+    
+        // Save options
+        foreach ($optionsData as $optionData) {
+            Option::create([
+                'question_id' => $currentQuestion->id,
+                'option_text' => $optionData['option_text'],
+                'is_correct' => $optionData['is_correct'],
+            ]);
+        }
+    }
+    
+    
+    
 
     public function deleteQuestion(Request $request){
 

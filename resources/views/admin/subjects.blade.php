@@ -40,6 +40,7 @@
                                 <table id="buttons-datatables" class="table table-borderedless dt-responsive nowrap table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th scope="col">SN</th>
                                             <th scope="col">Subject Name</th>
                                             <th scope="col">Code</th>
                                             <th scope="col">Subject Exam Type</th>
@@ -50,7 +51,7 @@
                                         @foreach($subjects as $subject)
                                         <tr>
                                             <th scope="row">{{ $loop->iteration }}</th>
-                                            <td>>{{ $subject->subject }} </td>
+                                            <td>{{ $subject->subject }} </td>
                                             <td>{{ $subject->code }} </td>
                                             <td>{{ $subject->type->type }} </td>
                                             <td>
