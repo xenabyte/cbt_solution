@@ -1334,11 +1334,8 @@ class AdminController extends Controller
                         'candidate_exam_subject_id' => $candidateSubject->id
                     ]);
                 }
-
             }
-
         }
-
 
         alert()->success('Good Job!!', 'Questions generated successfully')->persistent('Close');
         return redirect()->back();

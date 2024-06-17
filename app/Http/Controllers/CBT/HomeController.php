@@ -143,8 +143,9 @@ class HomeController extends Controller
 
     public function saveOption(Request $request){
         $validator = Validator::make($request->all(), [
-            'optionId' => 'required|min:1',
+            'optionId' => 'nullable|min:1',
             'questionId' => 'required|min:1',
+            'candidateTypedOption' => 'nullable',
         ]);
 
         if($validator->fails()) {
@@ -153,14 +154,27 @@ class HomeController extends Controller
         }
 
         $candidateQuestion = CandidateQuestion::find($request->questionId);
-        $candidateQuestion->candidate_option = $request->optionId;
+        $candidateQuestion->candidate_option = !empty($request->optionId)? $request->optionId:$request->candidateTypedOption;
 
-        $option = Option::find($request->optionId);
-        if($option->is_correct) {
-            $candidateQuestion->candidate_is_correct = true;
-        }else{
-            $candidateQuestion->candidate_is_correct = false;
+        $option = null;
+        if(!empty($request->optionId)){
+            $option = Option::find($request->optionId);
+            if($option->is_correct) {
+                $candidateQuestion->candidate_is_correct = true;
+            }else{
+                $candidateQuestion->candidate_is_correct = false;
+            }
+        }elseif(!empty($request->candidateTypedOption)){
+            $correctOption = Option::where('question_id', $candidateQuestion->question_id)->where('is_correct', TRUE)->first();
+            if($correctOption) {
+                if(trim(strtolower($request->candidateTypedOption)) == trim(strtolower($correctOption->option_text))) {
+                    $candidateQuestion->candidate_is_correct = true;
+                }else{
+                    $candidateQuestion->candidate_is_correct = false;
+                }
+            }
         }
+
         $candidateQuestion->save();
 
         $answeredQuestion = CandidateQuestion::where('candidate_id', $candidateQuestion->candidate_id)->where('candidate_option', '!=', null)->count();

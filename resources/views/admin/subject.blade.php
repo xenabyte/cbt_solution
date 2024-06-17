@@ -242,7 +242,7 @@
 
                                                                         <div class="mb-3">
                                                                             <label for="question" class="form-label">Question</label>
-                                                                            <textarea class="form-control" name="text" id="question">{{ $question->text }}</textarea>
+                                                                            <textarea class="form-control ckeditor" name="text" id="question">{{ $question->text }}</textarea>
                                                                         </div>
                                         
                                                                         <hr>
@@ -360,7 +360,7 @@
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" name="description" id="description">{!! $subject->description !!}</textarea>
+                                    <textarea class="form-control ckeditor" name="description" id="description">{!! $subject->description !!}</textarea>
                                 </div>
 
                                 <hr>

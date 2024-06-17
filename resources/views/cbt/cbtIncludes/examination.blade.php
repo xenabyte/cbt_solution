@@ -61,14 +61,23 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-12">
-                                                                        @foreach($candidateQuestion->question->options as $option)
+                                                                        @if(count($candidateQuestion->question->options) > 1)
+                                                                            @foreach($candidateQuestion->question->options as $option)
+                                                                                <div class="form-check mb-2">
+                                                                                    <input class="form-check-input" type="radio" name="option{{ $candidateQuestion->question->id }}" id="option{{ $option->id }}" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
+                                                                                    <label class="form-check-label" for="option{{ $option->id }}">
+                                                                                        {{ $option->option_text }}
+                                                                                    </label>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        @else
                                                                             <div class="form-check mb-2">
-                                                                                <input class="form-check-input" type="radio" name="option{{ $candidateQuestion->question->id }}" id="option{{ $option->id }}" value="{{ $option->id }}" onchange="selectOption(this.value, {{$candidateQuestion->id}})" {{ $option->id == $candidateQuestion->candidate_option ? 'checked' : '' }}>
-                                                                                <label class="form-check-label" for="option{{ $option->id }}">
-                                                                                    {{ $option->option_text }}
+                                                                                <input class="form-control" type="text" name="option{{ $candidateQuestion->question->id }}" value="{{ $candidateQuestion->candidate_option }}" onchange="checkTypedOption(this.value, {{$candidateQuestion->id}})" autofocus>
+                                                                                <label class="text-danger" for="">
+                                                                                    Type your answer.
                                                                                 </label>
                                                                             </div>
-                                                                        @endforeach
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -207,13 +216,15 @@
     // Variable to store the selected option
     var selectedOption = null;
     var mainQuestionId = null;
+    var candidateTypedOption = null;
 
 
     function saveSelectedOption() {
         // Save the selected option to the server
         axios.post('/cbt/saveOption', {
             optionId: selectedOption,
-            questionId: mainQuestionId
+            questionId: mainQuestionId,
+            candidateTypedOption: candidateTypedOption,
         })
         .then(function (response) {
             // Successful response handling if needed
@@ -230,6 +241,13 @@
         mainQuestionId = questionId;
 
         saveSelectedOption()
+    }
+
+    function checkTypedOption(typedOption, questionId){
+        candidateTypedOption = typedOption;
+        mainQuestionId = questionId;
+
+        saveSelectedOption();
     }
 
 </script>

@@ -133,7 +133,7 @@
 
                                                         <div class="mb-3">
                                                             <label for="description" class="form-label">Description</label>
-                                                            <textarea class="form-control" name="description" id="description">{!! $examination->title !!}</textarea>
+                                                            <textarea class="form-control ckeditor" name="description" id="description">{!! $examination->title !!}</textarea>
                                                         </div>
 
                                                         <div class="mb-3">
@@ -218,7 +218,7 @@
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" name="description" id="description"></textarea>
+                                    <textarea class="form-control ckeditor" name="description" id="description"></textarea>
                                 </div>
 
                                 <div class="mb-3">
