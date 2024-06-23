@@ -240,7 +240,11 @@
         selectedOption = optionId;
         mainQuestionId = questionId;
 
-        saveSelectedOption()
+        saveSelectedOption();
+
+        selectedOption = null;
+        mainQuestionId = null;
+        candidateTypedOption = null;
     }
 
     function checkTypedOption(typedOption, questionId){
@@ -248,6 +252,10 @@
         mainQuestionId = questionId;
 
         saveSelectedOption();
+        
+        selectedOption = null;
+        mainQuestionId = null;
+        candidateTypedOption = null;
     }
 
 </script>
