@@ -154,17 +154,10 @@ class HomeController extends Controller
         }
 
         $candidateQuestion = CandidateQuestion::find($request->questionId);
-        $candidateQuestion->candidate_option = !empty($request->optionId)? $request->optionId:$request->candidateTypedOption;
+        $candidateQuestion->candidate_option = !empty($request->candidateTypedOption)? $request->candidateTypedOption:$request->optionId;
 
         $option = null;
-        if(!empty($request->optionId)){
-            $option = Option::find($request->optionId);
-            if($option->is_correct) {
-                $candidateQuestion->candidate_is_correct = true;
-            }else{
-                $candidateQuestion->candidate_is_correct = false;
-            }
-        }elseif(!empty($request->candidateTypedOption)){
+        if(!empty($request->candidateTypedOption)){
             $correctOption = Option::where('question_id', $candidateQuestion->question_id)->where('is_correct', TRUE)->first();
             if($correctOption) {
                 if(trim(strtolower($request->candidateTypedOption)) == trim(strtolower($correctOption->option_text))) {
@@ -172,6 +165,13 @@ class HomeController extends Controller
                 }else{
                     $candidateQuestion->candidate_is_correct = false;
                 }
+            }
+        }elseif(!empty($request->optionId)){
+            $option = Option::find($request->optionId);
+            if($option->is_correct) {
+                $candidateQuestion->candidate_is_correct = true;
+            }else{
+                $candidateQuestion->candidate_is_correct = false;
             }
         }
 
