@@ -33,8 +33,18 @@
     <!-- custom Css-->
     <link href="{{asset('assets/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
 
-    <script src="https://cdn.tiny.cloud/1/b9d45cy4rlld8ypwkzb6yfzdza63fznxtcoc3iyit61r4rv9/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    <script src="{{ env('CKEDITOR_CDN') }}"></script>
+    <script>
+        // Select all textarea elements and initialize CKEditor on each
+        document.querySelectorAll('ckeditor').forEach((textarea) => {
+            CKEDITOR.replace(textarea);
+        });
+    </script>    
+    <style>
+        .cke_notifications_area{
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
