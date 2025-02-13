@@ -169,8 +169,8 @@ class AdminController extends Controller
             $examination->duration = $request->duration;
         }
 
-        if(!empty($request->examination_type_id) &&  $request->examination_type_id != $subject->examination_type_id){
-            $subject->examination_type_id = $request->examination_type_id;
+        if(!empty($request->examination_type_id) &&  $request->examination_type_id != $examination->examination_type_id){
+            $examination->examination_type_id = $request->examination_type_id;
         }
 
         if(!empty($request->status) &&  $request->status != $examination->status){
@@ -1013,7 +1013,7 @@ class AdminController extends Controller
 
         if($media->delete()){ 
             if(!empty($media->file)){
-                unlink($slider->image);
+                unlink($media->image);
             }
             alert()->success('Record Deleted', '')->persistent('Close');
             return redirect()->back();
